@@ -3,6 +3,8 @@ import { ErrorComponent } from './features/error/error.component'
 import { HomeComponent } from './features/home/home.component'
 import { MaintenanceComponent } from './features/maintenance/maintenance.component'
 import { MaintenanceGuard } from './core/guards/maintenance/maintenance.guard'
+import { SignInComponent } from './features/auth/sign-in/sign-in.component'
+import { SignUpComponent } from './features/auth/sign-up/sign-up.component'
 
 export const routes: Routes = [
     {
@@ -17,6 +19,16 @@ export const routes: Routes = [
     {
         path: 'error',
         component: ErrorComponent,
+        canActivate: [MaintenanceGuard],
+    },
+    {
+        path: 'sign-in',
+        component: SignInComponent,
+        canActivate: [MaintenanceGuard],
+    },
+    {
+        path: 'sign-up',
+        component: SignUpComponent,
         canActivate: [MaintenanceGuard],
     },
     {
