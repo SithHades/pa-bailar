@@ -5,6 +5,7 @@ import { MaintenanceComponent } from './features/maintenance/maintenance.compone
 import { MaintenanceGuard } from './core/guards/maintenance/maintenance.guard'
 import { SignInComponent } from './features/auth/sign-in/sign-in.component'
 import { SignUpComponent } from './features/auth/sign-up/sign-up.component'
+import { DashboardComponent as UserDashboardComponent } from './features/user/dashboard/dashboard.component'
 
 export const routes: Routes = [
     {
@@ -29,6 +30,11 @@ export const routes: Routes = [
     {
         path: 'sign-up',
         component: SignUpComponent,
+        canActivate: [MaintenanceGuard],
+    },
+    {
+        path: 'user/dashboard',
+        component: UserDashboardComponent,
         canActivate: [MaintenanceGuard],
     },
     {
