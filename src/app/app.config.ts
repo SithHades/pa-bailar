@@ -12,14 +12,14 @@ import {
     UserTrackingService,
 } from '@angular/fire/analytics'
 import { getFirestore, provideFirestore } from '@angular/fire/firestore'
-import { environment } from '../environments/environment'
+import { firebaseConfig } from '../environments/environment'
 
 export const appConfig: ApplicationConfig = {
     providers: [
         provideRouter(routes),
         provideClientHydration(),
         importProvidersFrom(
-            provideFirebaseApp(() => initializeApp(environment.firebaseConfig))
+            provideFirebaseApp(() => initializeApp(firebaseConfig))
         ),
         importProvidersFrom(provideAuth(() => getAuth())),
         importProvidersFrom(provideAnalytics(() => getAnalytics())),
