@@ -34,12 +34,7 @@
             ],
             "scripts": [
               "node_modules/flowbite/dist/flowbite.min.js"
-            ],
-            "server": "src/main.server.ts",
-            "prerender": true,
-            "ssr": {
-              "entry": "server.ts"
-            }
+            ]
           },
           "configurations": {
             "production": {
@@ -91,41 +86,6 @@
               "src/**/*.html"
             ]
           }
-        },
-        "storybook": {
-          "builder": "@storybook/angular:start-storybook",
-          "options": {
-            "configDir": ".storybook",
-            "browserTarget": "pa-bailar:build",
-            "compodoc": false,
-            "port": 6006
-          }
-        },
-        "build-storybook": {
-          "builder": "@storybook/angular:build-storybook",
-          "options": {
-            "configDir": ".storybook",
-            "browserTarget": "pa-bailar:build",
-            "compodoc": false,
-            "outputDir": "storybook-static"
-          }
-        },
-        "deploy": {
-          "builder": "@angular/fire:deploy",
-          "options": {
-            "version": 2
-          },
-          "configurations": {
-            "production": {
-              "buildTarget": "pa-bailar:build:production",
-              "serveTarget": "pa-bailar:serve:production"
-            },
-            "development": {
-              "buildTarget": "pa-bailar:build:development",
-              "serveTarget": "pa-bailar:serve:development"
-            }
-          },
-          "defaultConfiguration": "production"
         }
       }
     }
