@@ -1,9 +1,11 @@
 import { Component } from '@angular/core'
-import { CommonModule } from '@angular/common'
+import { CommonModule , registerLocaleData} from '@angular/common'
 import { RouterOutlet } from '@angular/router'
 import { FooterComponent } from './shared/components/footer/footer.component'
 import { MenuComponent } from './shared/components/menu/menu.component'
 import { HttpClientModule } from '@angular/common/http'
+import localeDe from '@angular/common/locales/de';
+import localeDeExtra from '@angular/common/locales/extra/de';
 
 @Component({
     selector: 'app-root',
@@ -18,4 +20,8 @@ import { HttpClientModule } from '@angular/common/http'
         MenuComponent,
     ],
 })
-export class AppComponent {}
+export class AppComponent {
+    constructor() {
+        registerLocaleData(localeDe, 'de-DE', localeDeExtra)
+    }
+}

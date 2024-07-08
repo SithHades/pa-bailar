@@ -1,5 +1,5 @@
 <div class="container mx-auto px-2 sm:px-4 py-4 sm:py-8">
-  <h1 class="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6 text-gray-800 dark:text-white">Community Calendar</h1>
+  <h1 class="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6 text-gray-800 dark:text-white">Community Kalender</h1>
   <div class="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-2 sm:p-6 mb-4 sm:mb-8 overflow-x-auto">
     <full-calendar [options]="calendarOptions"></full-calendar>
   </div>
@@ -7,7 +7,7 @@
   <!-- Selected Date Events Section -->
   <div *ngIf="selectedDate" class="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-4 sm:p-6 mb-4 sm:mb-8">
     <h2 class="text-xl sm:text-2xl font-semibold mb-4 text-gray-800 dark:text-white">
-      Events for {{ selectedDate | date:'mediumDate' }}
+      Events für {{ selectedDate | date:'mediumDate' }}
     </h2>
     <div *ngIf="selectedDateEvents.length > 0; else noEvents">
       <div *ngFor="let event of selectedDateEvents" class="mb-4 p-4 bg-gray-100 dark:bg-gray-700 rounded-lg">
@@ -17,9 +17,9 @@
       </div>
     </div>
     <ng-template #noEvents>
-      <p class="text-gray-600 dark:text-gray-300">No events planned for this day.</p>
+      <p class="text-gray-600 dark:text-gray-300">Keine Events geplant für diesen Tag.</p>
       <a routerLink="/create" class="inline-block mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors">
-        Create an Event
+        Erstell ein Event
       </a>
     </ng-template>
   </div>
@@ -31,7 +31,7 @@
         <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white">{{ selectedEvent.title }}</h3>
         <div class="mt-2 px-7 py-3">
           <p class="text-sm text-gray-500 dark:text-gray-300">
-            {{ selectedEvent.start | date:'medium' }} - {{ selectedEvent.end | date:'medium' }}
+            {{ selectedEvent.start | date:'short' }} - {{ selectedEvent.end | date:'short' }}
           </p>
           <p class="text-sm text-gray-500 dark:text-gray-300 mt-2">
             {{ selectedEvent.description }}
@@ -42,7 +42,7 @@
             (click)="closeEventPopup()"
             class="px-4 py-2 bg-blue-600 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-300"
           >
-            Close
+            Schließen
           </button>
         </div>
       </div>

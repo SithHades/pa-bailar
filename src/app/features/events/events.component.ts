@@ -2,7 +2,9 @@ import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular
 import { CommonModule } from '@angular/common';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { CalendarOptions, EventClickArg } from '@fullcalendar/core';
+import deLocale from '@fullcalendar/core/locales/de';
 import dayGridPlugin from '@fullcalendar/daygrid';
+import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction';
 import { Event } from '../../core/models/event.model'
 import { EventService } from '../../core/services/event.service';
@@ -20,16 +22,18 @@ export class EventsComponent implements OnInit {
   @ViewChild('eventPopup') eventPopup!: ElementRef;
 
   calendarOptions: CalendarOptions = {
-    plugins: [dayGridPlugin, interactionPlugin],
+    plugins: [dayGridPlugin, interactionPlugin, timeGridPlugin],
     initialView: 'dayGridMonth',
     weekends: true,
+    locales: [deLocale],
+    locale: deLocale,
     events: [],
     dateClick: this.handleDateClick.bind(this),
     eventClick: this.handleEventClick.bind(this),
     headerToolbar: {
       left: 'prev,next today',
       center: 'title',
-      right: 'dayGridMonth,dayGridWeek,dayGridDay'
+      right: 'dayGridMonth,timeGridWeek,timeGridDay'
     },
     views: {
       dayGridMonth: {
@@ -54,7 +58,7 @@ export class EventsComponent implements OnInit {
       this.calendarOptions.headerToolbar = {
         left: 'prev,next',
         center: 'title',
-        right: 'dayGridMonth,dayGridWeek'
+        right: 'dayGridMonth,timeGridWeek, timeGridDay'
       };
       this.calendarOptions.views = {
         dayGridMonth: {
@@ -66,7 +70,7 @@ export class EventsComponent implements OnInit {
       this.calendarOptions.headerToolbar = {
         left: 'prev,next today',
         center: 'title',
-        right: 'dayGridMonth,dayGridWeek,dayGridDay'
+        right: 'dayGridMonth,timeGridWeek,timeGridDay'
       };
       this.calendarOptions.views = {
         dayGridMonth: {
