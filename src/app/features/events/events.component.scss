@@ -1,0 +1,17 @@
+::ng-deep {
+    .fc-header-toolbar {
+      @apply mb-4;
+    }
+  
+    .fc-button-primary {
+      @apply bg-blue-600 hover:bg-blue-700 focus:ring-blue-500;
+    }
+  
+    .fc-day-today {
+      @apply bg-blue-100 dark:bg-blue-900;
+    }
+  
+    .fc-event {
+      @apply bg-blue-500 border-blue-600 cursor-pointer;
+    }
+  }
