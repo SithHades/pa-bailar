@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FullCalendarModule } from '@fullcalendar/angular';
-import { CalendarOptions } from '@fullcalendar/core';
+import { CalendarOptions, EventClickArg } from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
-import interactionPlugin from '@fullcalendar/interaction';
+import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction';
 import { Event } from '../../core/models/event.model'
 import { EventService } from '../../core/services/event.service';
 import { MenuComponent } from '../../shared/components/menu/menu.component';
@@ -17,16 +17,64 @@ import { FooterComponent } from '../../shared/components/footer/footer.component
   styleUrls: ['./events.component.scss']
 })
 export class EventsComponent implements OnInit {
+  @ViewChild('eventPopup') eventPopup!: ElementRef;
+
   calendarOptions: CalendarOptions = {
     plugins: [dayGridPlugin, interactionPlugin],
     initialView: 'dayGridMonth',
     weekends: true,
     events: [],
     dateClick: this.handleDateClick.bind(this),
-    eventClick: this.handleEventClick.bind(this)
+    eventClick: this.handleEventClick.bind(this),
+    headerToolbar: {
+      left: 'prev,next today',
+      center: 'title',
+      right: 'dayGridMonth,dayGridWeek,dayGridDay'
+    },
+    views: {
+      dayGridMonth: {
+        titleFormat: { year: 'numeric', month: 'short' }
+      }
+    }
   };
 
+  selectedDate: Date | null = null;
+  selectedDateEvents: Event[] = [];
+  selectedEvent: Event | null = null;
+
   constructor(private eventService: EventService) {}
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+    this.adjustCalendarView();
+  }
+
+  adjustCalendarView() {
+    if (window.innerWidth < 768) {
+      this.calendarOptions.headerToolbar = {
+        left: 'prev,next',
+        center: 'title',
+        right: 'dayGridMonth,dayGridWeek'
+      };
+      this.calendarOptions.views = {
+        dayGridMonth: {
+          titleFormat: { year: 'numeric', month: 'short' },
+          dayHeaderFormat: { weekday: 'narrow' }
+        }
+      };
+    } else {
+      this.calendarOptions.headerToolbar = {
+        left: 'prev,next today',
+        center: 'title',
+        right: 'dayGridMonth,dayGridWeek,dayGridDay'
+      };
+      this.calendarOptions.views = {
+        dayGridMonth: {
+          titleFormat: { year: 'numeric', month: 'long' }
+        }
+      };
+    }
+  }
 
   ngOnInit() {
     this.loadEvents();
@@ -36,6 +84,7 @@ export class EventsComponent implements OnInit {
     this.eventService.getEvents().subscribe(
       (events: Event[]) => {
         this.calendarOptions.events = events.map(event => ({
+          id: event.id?.toString(),
           title: event.title,
           start: event.start,
           end: event.end,
@@ -50,13 +99,30 @@ export class EventsComponent implements OnInit {
     );
   }
 
-  handleDateClick(arg: any) {
-    // Implement date click functionality (e.g., open a modal to add a new event)
-    console.log('Date click', arg.date);
+  handleDateClick(arg: DateClickArg) {
+    this.selectedDate = arg.date;
+    this.selectedDateEvents = (this.calendarOptions.events as Event[]).filter(
+      event => new Date(event.start).toDateString() === this.selectedDate?.toDateString()
+    );
   }
 
-  handleEventClick(arg: any) {
-    // Implement event click functionality (e.g., open a modal to show event details)
-    console.log('Event click', arg.event);
+  handleEventClick(arg: EventClickArg) {
+    this.selectedEvent = {
+      id: Number(arg.event.id),
+      title: arg.event.title,
+      start: arg.event.start as Date,
+      end: arg.event.end as Date,
+      description: arg.event.extendedProps['description']
+    };
+    this.showEventPopup();
+  }
+
+  showEventPopup() {
+    (this.eventPopup.nativeElement as HTMLElement).classList.remove('hidden');
+  }
+
+  closeEventPopup() {
+    (this.eventPopup.nativeElement as HTMLElement).classList.add('hidden');
+    this.selectedEvent = null;
   }
 }

@@ -1,17 +1,48 @@
 ::ng-deep {
-    .fc-header-toolbar {
-      @apply mb-4;
+  .fc {
+    @apply relative z-0 max-w-full overflow-x-auto;
+  }
+
+  .fc .fc-toolbar {
+    @apply flex-wrap justify-center gap-2;
+  }
+
+  .fc .fc-toolbar-title {
+    @apply text-xl md:text-2xl;
+  }
+
+  .fc .fc-button {
+    @apply px-2 py-1 text-sm md:px-3 md:py-2 md:text-base;
+  }
+
+  .fc .fc-view-harness {
+    @apply min-h-[400px] md:min-h-[600px];
+  }
+
+  .fc .fc-daygrid-day-number {
+    @apply text-xs md:text-sm;
+  }
+
+  .fc .fc-daygrid-day-top {
+    @apply flex justify-center;
+  }
+
+  @media (max-width: 640px) {
+    .fc .fc-toolbar.fc-header-toolbar {
+      @apply flex-col items-center;
     }
-  
-    .fc-button-primary {
-      @apply bg-blue-600 hover:bg-blue-700 focus:ring-blue-500;
-    }
-  
-    .fc-day-today {
-      @apply bg-blue-100 dark:bg-blue-900;
-    }
-  
-    .fc-event {
-      @apply bg-blue-500 border-blue-600 cursor-pointer;
+
+    .fc .fc-toolbar-chunk {
+      @apply mb-2;
     }
   }
+}
+
+// Popup styles
+.event-popup {
+  @apply fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50;
+}
+
+.event-popup-content {
+  @apply relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white dark:bg-gray-800;
+}
