@@ -24,6 +24,15 @@
     </ng-template>
   </div>
 
+  <!-- New Event Creation Section -->
+  <div id="new" class="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-4 sm:p-6 mb-4 sm:mb-8">
+    <h2 class="text-xl sm:text-2xl font-semibold mb-4 text-gray-800 dark:text-white">
+      Neues Event vorschlagen
+    </h2>
+    <p class="my-4 text-md text-gray-500">Das Event wird nicht direkt im Kalender auftauchen, sondern wird vorher von unserem Team moderiert.</p>
+    <app-event-form (formSubmit)="onNewEventSubmit($event)"></app-event-form>
+  </div>
+
   <!-- Event Popup -->
   <div #eventPopup class="hidden event-popup fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full" (click)="closeEventPopup()">
     <div class="relative event-popup-content top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white dark:bg-gray-800" (click)="$event.stopPropagation()">

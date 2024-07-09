@@ -13,6 +13,20 @@ export class EventService {
         return from(this.supabaseService.getSupabase()
             .from('pabailar_events')
             .select('*')
+            .eq('accepted', true)
+        ).pipe(
+            map(({data, error}) => {
+                if (error) throw error;
+                return data as Event[]
+            })
+        )
+    }
+
+    getEventProposals(): Observable<Event[]> {
+        return from(this.supabaseService.getSupabase()
+            .from('pabailar_events')
+            .select('*')
+            .eq('accepted', false)
         ).pipe(
             map(({data, error}) => {
                 if (error) throw error;
@@ -22,9 +36,10 @@ export class EventService {
     }
 
     addEvent(event: Event): Observable<Event> {
+        console.log("Adding Event")
         return from(this.supabaseService.getSupabase()
             .from('pabailar_events')
-            .insert(event)
+            .insert({...event, accepted: event.created_by === 'admin'})
             .single()
         ).pipe(
             map(({data, error}) => {
@@ -33,4 +48,44 @@ export class EventService {
             })
         )
     }
+
+    acceptEventProposal(eventId: number): Observable<Event> {
+        return from(this.supabaseService.getSupabase()
+            .from('pabailar_events')
+            .update({ accepted: true })
+            .eq('id', eventId)
+            .single()
+        ).pipe(
+            map(({data, error}) => {
+                if (error) throw error;
+                return data as Event;
+            })
+        )
+    }
+
+    deleteEvent(eventId: number): Observable<void> {
+        return from(this.supabaseService.getSupabase()
+            .from('pabailar_events')
+            .delete()
+            .eq('id', eventId)
+        ).pipe(
+            map(({error}) => {
+                if (error) throw error;
+            })
+        )
+    }
+
+    updateEvent(event: Event): Observable<Event> {
+        return from(this.supabaseService.getSupabase()
+          .from('pabailar_events')
+          .update(event)
+          .eq('id', event.id)
+          .single()
+        ).pipe(
+          map(({data, error}) => {
+            if (error) throw error;
+            return data as Event;
+          })
+        )
+      }
 }

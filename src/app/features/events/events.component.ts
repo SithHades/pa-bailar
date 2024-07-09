@@ -10,11 +10,12 @@ import { Event } from '../../core/models/event.model'
 import { EventService } from '../../core/services/event.service';
 import { MenuComponent } from '../../shared/components/menu/menu.component';
 import { FooterComponent } from '../../shared/components/footer/footer.component';
+import { EventFormComponent } from "../admin/dashboard/events/form/event-form.component";
 
 @Component({
   selector: 'app-events',
   standalone: true,
-  imports: [CommonModule, FullCalendarModule, MenuComponent, FooterComponent],
+  imports: [CommonModule, FullCalendarModule, MenuComponent, FooterComponent, EventFormComponent],
   templateUrl: './events.component.html',
   styleUrls: ['./events.component.scss']
 })
@@ -116,9 +117,20 @@ export class EventsComponent implements OnInit {
       title: arg.event.title,
       start: arg.event.start as Date,
       end: arg.event.end as Date,
-      description: arg.event.extendedProps['description']
+      description: arg.event.extendedProps['description'],
+      accepted: arg.event.extendedProps['accepted'],
+      created_by: arg.event.extendedProps['created_by']
     };
     this.showEventPopup();
+  }
+
+  onNewEventSubmit(eventData: Event) {
+    this.eventService.addEvent(eventData).subscribe(
+      (newEvent) => {
+        this.loadEvents();
+        // Optionally, adding some user feedback here in the future
+      }
+    );
   }
 
   showEventPopup() {

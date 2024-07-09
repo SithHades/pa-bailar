@@ -6,6 +6,7 @@ import { MenuComponent } from './shared/components/menu/menu.component'
 import { HttpClientModule } from '@angular/common/http'
 import localeDe from '@angular/common/locales/de';
 import localeDeExtra from '@angular/common/locales/extra/de';
+import { AuthService } from './core/services/auth.service'
 
 @Component({
     selector: 'app-root',
@@ -21,7 +22,13 @@ import localeDeExtra from '@angular/common/locales/extra/de';
     ],
 })
 export class AppComponent {
-    constructor() {
+    constructor(private authService: AuthService) {
         registerLocaleData(localeDe, 'de-DE', localeDeExtra)
+    }
+
+    ngOnInit() {
+        this.authService.checkSession().then(() => {
+            console.log('Initial session check complete');
+        });
     }
 }

@@ -5,4 +5,6 @@ export interface Event {
     start: Date;
     end: Date;
     description: string;
+    accepted: boolean;
+    created_by: string;
 }
