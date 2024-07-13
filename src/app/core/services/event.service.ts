@@ -15,13 +15,13 @@ export class EventService {
 
     getEvents(): Observable<PabailarEvent[]> {
         return from(this.appwriteService.getDatabase().listDocuments(
-            this.databaseId,
-            this.collectionId,
-            [Query.equal('accepted', true)]
+          this.databaseId,
+          this.collectionId,
+          [Query.equal('accepted', true)]
         )).pipe(
-            map(response => response.documents as unknown as PabailarEvent[])
+          map(response => response.documents as unknown as PabailarEvent[])
         );
-    }
+      }
 
     getEventProposals(): Observable<PabailarEvent[]> {
         return from(this.appwriteService.getDatabase().listDocuments(
@@ -70,7 +70,7 @@ export class EventService {
         return from(this.appwriteService.getDatabase().updateDocument(
             this.databaseId,
             this.collectionId,
-            event.documentId!,
+            event.$id!,
             event
         )).pipe(
             map(response => response as unknown as PabailarEvent)

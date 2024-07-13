@@ -91,9 +91,7 @@ export class EventFormComponent implements OnInit {
         ...formValue,
         image: imageUrl,
         createdBy: this.created_by_admin ? "admin" : "user",
-        accepted: this.created_by_admin,
-        createdAt: this.event?.createdAt || new Date(),
-        updatedAt: new Date()
+        accepted: this.created_by_admin
       };
       this.formSubmit.emit(eventData);
       this.clearForm();

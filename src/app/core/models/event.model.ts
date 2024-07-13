@@ -1,15 +1,15 @@
 export interface PabailarEvent {
-    documentId?: string;
+    $id?: string;
+    $createdAt?: string;
+    $updatedAt?: string;
     title: string;
-    start: Date;
-    end: Date;
+    start: string;
+    end: string;
     description: string;
     location: string;
     accepted: boolean;
     createdBy: string;
     isWorkshop: boolean;
     organizer: string;
-    createdAt?: Date;
-    updatedAt?: Date;
-    image: string;
-}
+    image: string | null;
+  }

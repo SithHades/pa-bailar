@@ -1,60 +1,64 @@
-<div class="container mx-auto px-2 sm:px-4 py-4 sm:py-8">
-  <h1 class="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6 text-gray-800 dark:text-white">Community Kalender</h1>
-  <div class="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-2 sm:p-6 mb-4 sm:mb-8 overflow-x-auto">
-    <full-calendar [options]="calendarOptions"></full-calendar>
-  </div>
+<div class="container mx-auto px-4 py-8">
+  <h1 class="text-3xl font-bold mb-8 text-gray-800 dark:text-white">Community Events</h1>
 
-  <!-- Selected Date Events Section -->
-  <div *ngIf="selectedDate" class="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-4 sm:p-6 mb-4 sm:mb-8">
-    <h2 class="text-xl sm:text-2xl font-semibold mb-4 text-gray-800 dark:text-white">
-      Events für {{ selectedDate | date:'mediumDate' }}
-    </h2>
-    <div *ngIf="selectedDateEvents.length > 0; else noEvents">
-      <div *ngFor="let event of selectedDateEvents" class="mb-4 p-4 bg-gray-100 dark:bg-gray-700 rounded-lg">
-        <h3 class="text-lg font-semibold text-gray-800 dark:text-white">{{ event.title }}</h3>
-        <p class="text-gray-600 dark:text-gray-300">{{ event.start | date:'shortTime' }} - {{ event.end | date:'shortTime' }}</p>
-        <p class="text-gray-600 dark:text-gray-300">{{ event.description }}</p>
+  <!-- Timeline of events -->
+  <div class="relative">
+    <div class="absolute left-0 top-0 ml-4 h-full w-0.5 bg-gray-200 dark:bg-gray-700"></div>
+    <div class="space-y-8">
+      <div *ngFor="let event of events" class="relative pl-8">
+        <div class="absolute left-0 top-2 -ml-1.5 h-3 w-3 rounded-full bg-blue-500"></div>
+        <div class="event-container bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden transition-all duration-300 ease-in-out" 
+             [class.expanded]="isEventExpanded(event.$id!)"
+             (click)="toggleEventDetails(event.$id!)">
+          
+             <div *ngIf="isEventExpanded(event.$id!) && event.image" class="relative">
+              <img [src]="getTransformedImageUrl(event.image, 800, 400)" 
+                   alt="Event image" 
+                   class="w-full h-48 object-cover">
+              <button (click)="openFullscreenImage(event.image, $event)" 
+                      class="fullscreen-button absolute top-2 right-2 bg-white rounded-full p-1 shadow-md hover:bg-gray-100 focus:outline-none">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                </svg>
+              </button>
+            </div>
+
+          <div class="p-4">
+            <h3 class="text-lg font-semibold text-gray-800 dark:text-white">{{ event.title }}</h3>
+            <p class="text-sm text-gray-600 dark:text-gray-300">{{ event.start | date:'medium' }}</p>
+            <p class="text-sm text-gray-500 dark:text-gray-400 mt-2" [class.line-clamp-2]="!isEventExpanded(event.$id!)">
+              {{ event.description }}
+            </p>
+            
+            <!-- Expanded content -->
+            <div *ngIf="isEventExpanded(event.$id!)" class="mt-4 space-y-2">
+              <p class="text-gray-600 dark:text-gray-300">
+                <strong>Ende:</strong> {{ event.end | date:'medium' }}
+              </p>
+              <p class="text-gray-600 dark:text-gray-300">
+                <strong>Ort:</strong> {{ event.location }}
+              </p>
+              <p class="text-gray-600 dark:text-gray-300">
+                <strong>Veranstalter:</strong> {{ event.organizer }}
+              </p>
+              <p *ngIf="event.isWorkshop" class="text-gray-600 dark:text-gray-300">
+                Dieses Event ist ein Workshop.
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-    <ng-template #noEvents>
-      <p class="text-gray-600 dark:text-gray-300">Keine Events geplant für diesen Tag.</p>
-      <a routerLink="/create" class="inline-block mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors">
-        Erstell ein Event
-      </a>
-    </ng-template>
   </div>
 
-  <!-- New Event Creation Section -->
-  <div id="new" class="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-4 sm:p-6 mb-4 sm:mb-8">
-    <h2 class="text-xl sm:text-2xl font-semibold mb-4 text-gray-800 dark:text-white">
-      Neues Event vorschlagen
-    </h2>
-    <p class="my-4 text-md text-gray-500">Das Event wird nicht direkt im Kalender auftauchen, sondern wird vorher von unserem Team moderiert.</p>
+  <!-- Fullscreen Image Modal -->
+  <div *ngIf="fullscreenImage" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50" (click)="closeFullscreenImage()">
+    <img [src]="fullscreenImage" alt="Fullscreen event image" class="max-w-full max-h-full object-contain">
+  </div>
+
+  <!-- New event form -->
+  <div class="mt-12 bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+    <h2 class="text-2xl font-bold mb-4 text-gray-800 dark:text-white">Schlag ein neues Event vor.</h2>
     <app-event-form (formSubmit)="onNewEventSubmit($event)"></app-event-form>
-  </div>
-
-  <!-- Event Popup -->
-  <div #eventPopup class="hidden event-popup fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full" (click)="closeEventPopup()">
-    <div class="relative event-popup-content top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white dark:bg-gray-800" (click)="$event.stopPropagation()">
-      <div *ngIf="selectedEvent" class="mt-3 text-center">
-        <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white">{{ selectedEvent.title }}</h3>
-        <div class="mt-2 px-7 py-3">
-          <p class="text-sm text-gray-500 dark:text-gray-300">
-            {{ selectedEvent.start | date:'short' }} - {{ selectedEvent.end | date:'short' }}
-          </p>
-          <p class="text-sm text-gray-500 dark:text-gray-300 mt-2">
-            {{ selectedEvent.description }}
-          </p>
-        </div>
-        <div class="items-center px-4 py-3">
-          <button
-            (click)="closeEventPopup()"
-            class="px-4 py-2 bg-blue-600 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-300"
-          >
-            Schließen
-          </button>
-        </div>
-      </div>
-    </div>
   </div>
 </div>
