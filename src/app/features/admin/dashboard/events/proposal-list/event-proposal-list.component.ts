@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Event } from '../../../../../core/models/event.model';
+import { PabailarEvent } from '../../../../../core/models/event.model';
 import { EventService } from '../../../../../core/services/event.service'
 import { CommonModule, DatePipe } from '@angular/common'
 
@@ -11,7 +11,7 @@ import { CommonModule, DatePipe } from '@angular/common'
   imports: [ CommonModule, DatePipe ]
 })
 export class EventProposalListComponent implements OnInit {
-  eventProposals: Event[] = [];
+  eventProposals: PabailarEvent[] = [];
 
   constructor(private eventService: EventService) {}
 
@@ -25,15 +25,15 @@ export class EventProposalListComponent implements OnInit {
     );
   }
 
-  acceptProposal(eventId: number) {
-    this.eventService.acceptEventProposal(eventId).subscribe(
+  acceptProposal(eventId: string | number) {
+    this.eventService.acceptEventProposal(eventId.toString()).subscribe(
       () => this.loadEventProposals(),
     );
   }
 
-  rejectProposal(eventId: number) {
+  rejectProposal(eventId: string | number) {
     console.log("Rejecting and deleting event")
-    this.eventService.deleteEvent(eventId).subscribe(
+    this.eventService.deleteEvent(eventId.toString()).subscribe(
       () => {
         this.loadEventProposals()
         console.log("Deleted Event")

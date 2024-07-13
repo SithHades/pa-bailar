@@ -1,48 +1,106 @@
-::ng-deep {
-  .fc {
-    @apply relative z-0 max-w-full overflow-x-auto;
+.container {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+@media (min-width: 640px) {
+  .container {
+    max-width: 640px;
+  }
+}
+
+@media (min-width: 768px) {
+  .container {
+    max-width: 768px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    max-width: 1024px;
+  }
+}
+
+.timeline-dot {
+  transition: transform 0.2s;
+}
+
+.timeline-item:hover .timeline-dot {
+  transform: scale(1.5);
+}
+
+// Styles for event expansion
+.expanded {
+  background-color: #f3f4f6; // Light gray background for expanded state
+}
+
+.dark .expanded {
+  background-color: #374151; // Dark mode expanded background
+}
+
+p {
+  transition: all 0.3s ease-in-out;
+}
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;  
+  overflow: hidden;
+  line-clamp: 2;
+}
+
+.event-container {
+  position: relative;
+
+  &:not(.expanded)::after {
+    content: '▼';
+    position: absolute;
+    bottom: 0.5rem;
+    right: 0.5rem;
+    font-size: 0.75rem;
+    color: #9ca3af; // Gray color
+    transition: transform 0.3s ease-in-out;
   }
 
-  .fc .fc-toolbar {
-    @apply flex-wrap justify-center gap-2;
+  &.expanded::after {
+    transform: rotate(180deg);
   }
+}
 
-  .fc .fc-toolbar-title {
-    @apply text-xl md:text-2xl;
-  }
-
-  .fc .fc-button {
-    @apply px-2 py-1 text-sm md:px-3 md:py-2 md:text-base;
-  }
-
-  .fc .fc-view-harness {
-    @apply min-h-[400px] md:min-h-[600px];
-  }
-
-  .fc .fc-daygrid-day-number {
-    @apply text-xs md:text-sm;
-  }
-
-  .fc .fc-daygrid-day-top {
-    @apply flex justify-center;
-  }
-
-  @media (max-width: 640px) {
-    .fc .fc-toolbar.fc-header-toolbar {
-      @apply flex-col items-center;
-    }
-
-    .fc .fc-toolbar-chunk {
-      @apply mb-2;
+.dark {
+  .event-container {
+    &:not(.expanded)::after {
+      color: #9ca3af; // Adjust color for dark mode if needed
     }
   }
 }
 
-// Popup styles
-.event-popup {
-  @apply fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50;
+// Ensure the plus button doesn't get the expand indicator
+.fullscreen-button {
+  &::after {
+    content: none !important;
+  }
 }
 
-.event-popup-content {
-  @apply relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white dark:bg-gray-800;
+.expanded::after {
+  transform: rotate(180deg);
+}
+
+.fullscreen-modal {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.fullscreen-modal img {
+  animation: scaleIn 0.3s ease-in-out;
+}
+
+@keyframes scaleIn {
+  from { transform: scale(0.9); }
+  to { transform: scale(1); }
 }

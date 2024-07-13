@@ -1,10 +1,15 @@
-export interface Event {
-    id?: number;
-    created_at?: Date;
+export interface PabailarEvent {
+    $id?: string;
+    $createdAt?: string;
+    $updatedAt?: string;
     title: string;
-    start: Date;
-    end: Date;
+    start: string;
+    end: string;
     description: string;
+    location: string;
     accepted: boolean;
-    created_by: string;
-}
+    createdBy: string;
+    isWorkshop: boolean;
+    organizer: string;
+    image: string | null;
+  }

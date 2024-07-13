@@ -19,9 +19,9 @@ export class AdminLoginComponent {
 
   async onSubmit() {
     if (await this.authService.adminLogin(this.email, this.password)) {
-      this.router.navigate(['/admin']);
+        this.router.navigate(['/admin']);
     } else {
-      // Handle login error
+        console.error('Login failed');
     }
-  }
+}
 }

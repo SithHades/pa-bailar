@@ -1,91 +1,79 @@
 import { Injectable } from "@angular/core"
-import { SupabaseService } from "./supabase.service"
+import { AppwriteService } from "./appwrite.service"
 import { Observable, from, map } from "rxjs"
-import { Event } from '../models/event.model'
+import { PabailarEvent } from '../models/event.model'
+import { Query } from "appwrite"
 
 @Injectable({
     providedIn: 'root'
 })
 export class EventService {
-    constructor(private supabaseService: SupabaseService) {}
+    private collectionId = '66914ead0004e3c3d75a'; // Replace with your Appwrite collection ID
+    private databaseId = '66914e9b001a2a026cab'; // Replace with your Appwrite database ID
 
-    getEvents(): Observable<Event[]> {
-        return from(this.supabaseService.getSupabase()
-            .from('pabailar_events')
-            .select('*')
-            .eq('accepted', true)
-        ).pipe(
-            map(({data, error}) => {
-                if (error) throw error;
-                return data as Event[]
-            })
-        )
-    }
+    constructor(private appwriteService: AppwriteService) {}
 
-    getEventProposals(): Observable<Event[]> {
-        return from(this.supabaseService.getSupabase()
-            .from('pabailar_events')
-            .select('*')
-            .eq('accepted', false)
-        ).pipe(
-            map(({data, error}) => {
-                if (error) throw error;
-                return data as Event[]
-            })
-        )
-    }
-
-    addEvent(event: Event): Observable<Event> {
-        console.log("Adding Event")
-        return from(this.supabaseService.getSupabase()
-            .from('pabailar_events')
-            .insert({...event, accepted: event.created_by === 'admin'})
-            .single()
-        ).pipe(
-            map(({data, error}) => {
-                if (error) throw error;
-                return data as Event;
-            })
-        )
-    }
-
-    acceptEventProposal(eventId: number): Observable<Event> {
-        return from(this.supabaseService.getSupabase()
-            .from('pabailar_events')
-            .update({ accepted: true })
-            .eq('id', eventId)
-            .single()
-        ).pipe(
-            map(({data, error}) => {
-                if (error) throw error;
-                return data as Event;
-            })
-        )
-    }
-
-    deleteEvent(eventId: number): Observable<void> {
-        return from(this.supabaseService.getSupabase()
-            .from('pabailar_events')
-            .delete()
-            .eq('id', eventId)
-        ).pipe(
-            map(({error}) => {
-                if (error) throw error;
-            })
-        )
-    }
-
-    updateEvent(event: Event): Observable<Event> {
-        return from(this.supabaseService.getSupabase()
-          .from('pabailar_events')
-          .update(event)
-          .eq('id', event.id)
-          .single()
-        ).pipe(
-          map(({data, error}) => {
-            if (error) throw error;
-            return data as Event;
-          })
-        )
+    getEvents(): Observable<PabailarEvent[]> {
+        return from(this.appwriteService.getDatabase().listDocuments(
+          this.databaseId,
+          this.collectionId,
+          [Query.equal('accepted', true)]
+        )).pipe(
+          map(response => response.documents as unknown as PabailarEvent[])
+        );
       }
+
+    getEventProposals(): Observable<PabailarEvent[]> {
+        return from(this.appwriteService.getDatabase().listDocuments(
+            this.databaseId,
+            this.collectionId,
+            [Query.equal('accepted', false)]
+        )).pipe(
+            map(response => response.documents as unknown as PabailarEvent[])
+        );
+    }
+
+    addEvent(event: PabailarEvent): Observable<PabailarEvent> {
+        console.log("Adding Event");
+        return from(this.appwriteService.getDatabase().createDocument(
+            this.databaseId,
+            this.collectionId,
+            'unique()',
+            { ...event, accepted: event.createdBy === 'admin' || event.createdBy === 'Admin' }
+        )).pipe(
+            map(response => response as unknown as PabailarEvent)
+        );
+    }
+
+    acceptEventProposal(eventId: string): Observable<PabailarEvent> {
+        return from(this.appwriteService.getDatabase().updateDocument(
+            this.databaseId,
+            this.collectionId,
+            eventId,
+            { accepted: true }
+        )).pipe(
+            map(response => response as unknown as PabailarEvent)
+        );
+    }
+
+    deleteEvent(eventId: string): Observable<void> {
+        return from(this.appwriteService.getDatabase().deleteDocument(
+            this.databaseId,
+            this.collectionId,
+            eventId
+        )).pipe(
+            map(() => undefined)
+        );
+    }
+
+    updateEvent(event: PabailarEvent): Observable<PabailarEvent> {
+        return from(this.appwriteService.getDatabase().updateDocument(
+            this.databaseId,
+            this.collectionId,
+            event.$id!,
+            event
+        )).pipe(
+            map(response => response as unknown as PabailarEvent)
+        );
+    }
 }
