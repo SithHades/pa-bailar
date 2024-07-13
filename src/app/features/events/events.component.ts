@@ -89,7 +89,7 @@ export class EventsComponent implements OnInit {
     this.eventService.getEvents().subscribe(
       (events: Event[]) => {
         this.calendarOptions.events = events.map(event => ({
-          id: event.id?.toString(),
+          id: event.documentId?.toString(),
           title: event.title,
           start: event.start,
           end: event.end,
@@ -113,13 +113,17 @@ export class EventsComponent implements OnInit {
 
   handleEventClick(arg: EventClickArg) {
     this.selectedEvent = {
-      id: Number(arg.event.id),
+      documentId: arg.event.id,
       title: arg.event.title,
       start: arg.event.start as Date,
       end: arg.event.end as Date,
       description: arg.event.extendedProps['description'],
       accepted: arg.event.extendedProps['accepted'],
-      created_by: arg.event.extendedProps['created_by']
+      createdBy: arg.event.extendedProps['created_by'],
+      location: arg.event.extendedProps['location'] || '',
+      isWorkshop: arg.event.extendedProps['is_workshop'] || null,
+      organizer: arg.event.extendedProps['organizer'] || '',
+      image: arg.event.extendedProps['image'] || '',
     };
     this.showEventPopup();
   }

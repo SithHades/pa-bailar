@@ -1,6 +1,7 @@
-import { Injectable } from "@angular/core"
-import { BehaviorSubject, Observable, from, of, switchMap, tap } from "rxjs"
-import { SupabaseService } from "./supabase.service"
+import { Injectable } from "@angular/core";
+import { BehaviorSubject, Observable, from, of, switchMap, tap, catchError } from "rxjs";
+import { AppwriteService } from "./appwrite.service";
+import { Models } from 'appwrite';
 
 @Injectable({
     providedIn: 'root'
@@ -8,44 +9,52 @@ import { SupabaseService } from "./supabase.service"
 export class AuthService {
     private isAdminLoggedInSubject = new BehaviorSubject<boolean>(false);
 
-    constructor(private supabaseService: SupabaseService) {
-        this.supabaseService.getSupabase().auth.onAuthStateChange((event, session) => {
-            console.log('Auth state changed:', event);
-            this.isAdminLoggedInSubject.next(!!session);
-        });
+    constructor(private appwriteService: AppwriteService) {
+        try {
+            this.checkSession().then(() => {
+                console.log('Initial session check complete');
+                console.log(this.isAdminLoggedInSubject.value)
+            });
+        } catch (error) {
+            console.error("Initial session check error:", error);
+        }
     }
 
     isAdminLoggedIn(): Observable<boolean> {
-        return from(this.checkSession()).pipe(
-          switchMap(() => this.isAdminLoggedInSubject.asObservable()),
-          tap(isLoggedIn => console.log('Current login status:', isLoggedIn))
-        );
+        return this.isAdminLoggedInSubject.asObservable();
     }
     
     async adminLogin(email: string, password: string): Promise<boolean> {
-        const { data, error } = await this.supabaseService.getSupabase().auth.signInWithPassword({email, password});
-        const isLoggedIn = !!data.user;
-        this.isAdminLoggedInSubject.next(isLoggedIn);
-        console.log("Login attempt result:", isLoggedIn);
-        return isLoggedIn;
+        try {
+            const session = await this.appwriteService.getAccount().createEmailPasswordSession(email, password);
+            this.isAdminLoggedInSubject.next(true);
+            console.log("Login successful");
+            return true;
+        } catch (error) {
+            console.error("Login error:", error);
+            this.isAdminLoggedInSubject.next(false);
+            return false;
+        }
     }
       
     async adminLogout(): Promise<void> {
-        await this.supabaseService.getSupabase().auth.signOut();
-        this.isAdminLoggedInSubject.next(false);
-        console.log("Logged out");
-    }
-
-    async checkAuthStatus() {
-        const { data: { session } } = await this.supabaseService.getSupabase().auth.getSession();
-        this.isAdminLoggedInSubject.next(!!session);
+        try {
+            await this.appwriteService.getAccount().deleteSession('current');
+            this.isAdminLoggedInSubject.next(false);
+            console.log("Logged out");
+        } catch (error) {
+            console.error("Logout error:", error);
+        }
     }
 
     async checkSession(): Promise<boolean> {
-        const { data: { session } } = await this.supabaseService.getSupabase().auth.getSession();
-        const isLoggedIn = !!session;
-        this.isAdminLoggedInSubject.next(isLoggedIn);
-        console.log('Session check result:', isLoggedIn);
-        return isLoggedIn;
+        try {
+            const session = await this.appwriteService.getAccount().getSession('current');
+            this.isAdminLoggedInSubject.next(true);
+            return true;
+        } catch (error) {
+            this.isAdminLoggedInSubject.next(false);
+            return false;
+        }
     }
 }

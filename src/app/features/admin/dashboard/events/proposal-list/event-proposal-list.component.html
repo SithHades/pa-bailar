@@ -20,10 +20,10 @@
             </div>
             <div class="mt-2 flex items-center text-sm text-gray-500 sm:mt-0">
               <p class="mr-4">{{proposal.start | date:'short'}}</p>
-              <button (click)="acceptProposal(proposal.id!)" class="mr-2 inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-green-700 bg-green-100 hover:bg-green-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+              <button (click)="acceptProposal(proposal.documentId!)" class="mr-2 inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-green-700 bg-green-100 hover:bg-green-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
                 Accept
               </button>
-              <button (click)="rejectProposal(proposal.id!)" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-red-700 bg-red-100 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+              <button (click)="rejectProposal(proposal.documentId!)" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-red-700 bg-red-100 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
                 Reject
               </button>
             </div>

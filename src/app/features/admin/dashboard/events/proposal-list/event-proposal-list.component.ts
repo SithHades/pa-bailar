@@ -25,15 +25,15 @@ export class EventProposalListComponent implements OnInit {
     );
   }
 
-  acceptProposal(eventId: number) {
-    this.eventService.acceptEventProposal(eventId).subscribe(
+  acceptProposal(eventId: string | number) {
+    this.eventService.acceptEventProposal(eventId.toString()).subscribe(
       () => this.loadEventProposals(),
     );
   }
 
-  rejectProposal(eventId: number) {
+  rejectProposal(eventId: string | number) {
     console.log("Rejecting and deleting event")
-    this.eventService.deleteEvent(eventId).subscribe(
+    this.eventService.deleteEvent(eventId.toString()).subscribe(
       () => {
         this.loadEventProposals()
         console.log("Deleted Event")

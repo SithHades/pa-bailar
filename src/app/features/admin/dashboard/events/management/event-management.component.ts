@@ -38,8 +38,8 @@ export class EventManagementComponent implements OnInit {
     this.selectedEvent = { ...event };
   }
 
-  deleteEvent(eventId: number) {
-    this.eventService.deleteEvent(eventId).subscribe(
+  deleteEvent(eventId: string | number) {
+    this.eventService.deleteEvent(eventId.toString()).subscribe(
       () => this.loadEvents()
     );
   }

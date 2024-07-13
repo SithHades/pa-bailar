@@ -1,10 +1,16 @@
 export interface Event {
-    id?: number;
+    documentId?: string;
     created_at?: Date;
     title: string;
     start: Date;
     end: Date;
     description: string;
+    location: string;
     accepted: boolean;
-    created_by: string;
+    createdBy: string;
+    isWorkshop: boolean | null;
+    organizer: string;
+    createdAt?: Date;
+    updatedAt?: Date;
+    image: string;
 }

@@ -27,8 +27,8 @@ export class AppComponent {
     }
 
     ngOnInit() {
-        this.authService.checkSession().then(() => {
-            console.log('Initial session check complete');
-        });
+        // this.authService.checkSession().then(() => {
+        //     console.log('Initial session check complete');
+        // });
     }
 }
