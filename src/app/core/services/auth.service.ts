@@ -8,23 +8,33 @@ import { Models } from 'appwrite';
 })
 export class AuthService {
     private isAdminLoggedInSubject = new BehaviorSubject<boolean>(false);
+    private initialCheckComplete = new BehaviorSubject<boolean>(false);
 
     constructor(private appwriteService: AppwriteService) {
-        try {
-            this.checkSession().then(() => {
-                console.log('Initial session check complete');
-                console.log(this.isAdminLoggedInSubject.value)
-            });
-        } catch (error) {
-            console.error("Initial session check error:", error);
-        }
+        this.checkSession();
     }
 
     isAdminLoggedIn(): Observable<boolean> {
         return this.isAdminLoggedInSubject.asObservable();
     }
+
+    isInitialCheckComplete(): Observable<boolean> {
+        return this.initialCheckComplete.asObservable();
+    }
     
     async adminLogin(email: string, password: string): Promise<boolean> {
+        try {
+            // Check if there's an existing session first
+            const currentSession = await this.appwriteService.getAccount().getSession('current');
+            if (currentSession) {
+                console.log("Already logged in");
+                this.isAdminLoggedInSubject.next(true);
+                return true;
+            }
+        } catch (error) {
+            // No current session, proceed with login
+        }
+
         try {
             const session = await this.appwriteService.getAccount().createEmailPasswordSession(email, password);
             this.isAdminLoggedInSubject.next(true);
@@ -51,10 +61,14 @@ export class AuthService {
         try {
             const session = await this.appwriteService.getAccount().getSession('current');
             this.isAdminLoggedInSubject.next(true);
+            console.log("Session check: Logged in");
             return true;
         } catch (error) {
             this.isAdminLoggedInSubject.next(false);
+            console.log("Session check: Not logged in");
             return false;
+        } finally {
+            this.initialCheckComplete.next(true);
         }
     }
 }
