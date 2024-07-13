@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core"
 import { AppwriteService } from "./appwrite.service"
 import { Observable, from, map } from "rxjs"
-import { Event } from '../models/event.model'
+import { PabailarEvent } from '../models/event.model'
 import { Query } from "appwrite"
 
 @Injectable({
@@ -13,27 +13,27 @@ export class EventService {
 
     constructor(private appwriteService: AppwriteService) {}
 
-    getEvents(): Observable<Event[]> {
+    getEvents(): Observable<PabailarEvent[]> {
         return from(this.appwriteService.getDatabase().listDocuments(
             this.databaseId,
             this.collectionId,
             [Query.equal('accepted', true)]
         )).pipe(
-            map(response => response.documents as unknown as Event[])
+            map(response => response.documents as unknown as PabailarEvent[])
         );
     }
 
-    getEventProposals(): Observable<Event[]> {
+    getEventProposals(): Observable<PabailarEvent[]> {
         return from(this.appwriteService.getDatabase().listDocuments(
             this.databaseId,
             this.collectionId,
             [Query.equal('accepted', false)]
         )).pipe(
-            map(response => response.documents as unknown as Event[])
+            map(response => response.documents as unknown as PabailarEvent[])
         );
     }
 
-    addEvent(event: Event): Observable<Event> {
+    addEvent(event: PabailarEvent): Observable<PabailarEvent> {
         console.log("Adding Event");
         return from(this.appwriteService.getDatabase().createDocument(
             this.databaseId,
@@ -41,18 +41,18 @@ export class EventService {
             'unique()',
             { ...event, accepted: event.createdBy === 'admin' || event.createdBy === 'Admin' }
         )).pipe(
-            map(response => response as unknown as Event)
+            map(response => response as unknown as PabailarEvent)
         );
     }
 
-    acceptEventProposal(eventId: string): Observable<Event> {
+    acceptEventProposal(eventId: string): Observable<PabailarEvent> {
         return from(this.appwriteService.getDatabase().updateDocument(
             this.databaseId,
             this.collectionId,
             eventId,
             { accepted: true }
         )).pipe(
-            map(response => response as unknown as Event)
+            map(response => response as unknown as PabailarEvent)
         );
     }
 
@@ -66,14 +66,14 @@ export class EventService {
         );
     }
 
-    updateEvent(event: Event): Observable<Event> {
+    updateEvent(event: PabailarEvent): Observable<PabailarEvent> {
         return from(this.appwriteService.getDatabase().updateDocument(
             this.databaseId,
             this.collectionId,
             event.documentId!,
             event
         )).pipe(
-            map(response => response as unknown as Event)
+            map(response => response as unknown as PabailarEvent)
         );
     }
 }

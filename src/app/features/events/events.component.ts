@@ -6,7 +6,7 @@ import deLocale from '@fullcalendar/core/locales/de';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction';
-import { Event } from '../../core/models/event.model'
+import { PabailarEvent } from '../../core/models/event.model'
 import { EventService } from '../../core/services/event.service';
 import { MenuComponent } from '../../shared/components/menu/menu.component';
 import { FooterComponent } from '../../shared/components/footer/footer.component';
@@ -44,8 +44,8 @@ export class EventsComponent implements OnInit {
   };
 
   selectedDate: Date | null = null;
-  selectedDateEvents: Event[] = [];
-  selectedEvent: Event | null = null;
+  selectedDateEvents: PabailarEvent[] = [];
+  selectedEvent: PabailarEvent | null = null;
 
   constructor(private eventService: EventService) {}
 
@@ -87,7 +87,7 @@ export class EventsComponent implements OnInit {
 
   loadEvents() {
     this.eventService.getEvents().subscribe(
-      (events: Event[]) => {
+      (events: PabailarEvent[]) => {
         this.calendarOptions.events = events.map(event => ({
           id: event.documentId?.toString(),
           title: event.title,
@@ -106,7 +106,7 @@ export class EventsComponent implements OnInit {
 
   handleDateClick(arg: DateClickArg) {
     this.selectedDate = arg.date;
-    this.selectedDateEvents = (this.calendarOptions.events as Event[]).filter(
+    this.selectedDateEvents = (this.calendarOptions.events as PabailarEvent[]).filter(
       event => new Date(event.start).toDateString() === this.selectedDate?.toDateString()
     );
   }
@@ -128,7 +128,7 @@ export class EventsComponent implements OnInit {
     this.showEventPopup();
   }
 
-  onNewEventSubmit(eventData: Event) {
+  onNewEventSubmit(eventData: PabailarEvent) {
     this.eventService.addEvent(eventData).subscribe(
       (newEvent) => {
         this.loadEvents();

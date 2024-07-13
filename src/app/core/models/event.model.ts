@@ -1,6 +1,5 @@
-export interface Event {
+export interface PabailarEvent {
     documentId?: string;
-    created_at?: Date;
     title: string;
     start: Date;
     end: Date;
@@ -8,7 +7,7 @@ export interface Event {
     location: string;
     accepted: boolean;
     createdBy: string;
-    isWorkshop: boolean | null;
+    isWorkshop: boolean;
     organizer: string;
     createdAt?: Date;
     updatedAt?: Date;

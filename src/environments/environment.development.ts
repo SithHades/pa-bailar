@@ -6,6 +6,7 @@ export const environment = {
     },
     appwrite: {
         endpoint: 'https://appwrite.kncklab.com/v1',
-        projectId: '66914e3e001cb4333244'
+        projectId: '66914e3e001cb4333244',
+        storageBucketId: '6691501a003c8ffb1f56'
     }
 };
