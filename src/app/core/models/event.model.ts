@@ -12,4 +12,6 @@ export interface PabailarEvent {
     isWorkshop: boolean;
     organizer: string;
     image: string | null;
+    isFullDay: boolean;
+    admissionFee: number | null;
   }

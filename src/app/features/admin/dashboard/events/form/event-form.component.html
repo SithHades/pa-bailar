@@ -5,15 +5,24 @@
     <p *ngIf="eventForm.get('title')?.touched && eventForm.get('title')?.hasError('required')" class="mt-1 text-sm text-red-600">Titel ist erforderlich.</p>
   </div>
 
+  <div class="flex items-center">
+    <input type="checkbox" id="isFullDay" formControlName="isFullDay" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-offset-0 focus:ring-indigo-200 focus:ring-opacity-50">
+    <label for="isFullDay" class="ml-2 block text-sm text-gray-900">Ganztägiges Event</label>
+  </div>
+
   <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
     <div>
       <label for="start" class="block text-sm font-medium text-gray-700">Start *</label>
       <input type="datetime-local" id="start" formControlName="start" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required>
+      <p *ngIf="eventForm.get('start')?.touched && eventForm.get('start')?.hasError('required')" class="mt-1 text-sm text-red-600">Startdatum ist erforderlich.</p>
+      <p *ngIf="eventForm.get('start')?.touched && eventForm.get('start')?.hasError('pastDate')" class="mt-1 text-sm text-red-600">Das Startdatum muss in der Zukunft liegen.</p>
     </div>
 
     <div>
       <label for="end" class="block text-sm font-medium text-gray-700">Ende *</label>
       <input type="datetime-local" id="end" formControlName="end" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required>
+      <p *ngIf="eventForm.get('end')?.touched && eventForm.get('end')?.hasError('required')" class="mt-1 text-sm text-red-600">Enddatum ist erforderlich.</p>
+      <p *ngIf="eventForm.get('end')?.touched && eventForm.get('end')?.hasError('endDateBeforeStart')" class="mt-1 text-sm text-red-600">Das Enddatum muss nach dem Startdatum liegen.</p>
     </div>
   </div>
 
@@ -26,6 +35,13 @@
   <div>
     <label for="location" class="block text-sm font-medium text-gray-700">Ort *</label>
     <input type="text" id="location" formControlName="location" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required>
+  </div>
+
+  <div>
+    <label for="admissionFee" class="block text-sm font-medium text-gray-700">Eintritt (€)</label>
+    <input type="number" id="admissionFee" formControlName="admissionFee" step="0.01" min="0" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+    <p *ngIf="eventForm.get('admissionFee')?.touched && eventForm.get('admissionFee')?.hasError('min')" class="mt-1 text-sm text-red-600">Der Eintrittspreis muss positiv sein.</p>
+    <p *ngIf="eventForm.get('admissionFee')?.touched && eventForm.get('admissionFee')?.hasError('pattern')" class="mt-1 text-sm text-red-600">Bitte geben Sie einen gültigen Preis ein (z.B. 10 oder 10.50).</p>
   </div>
 
   <div>
