@@ -36,7 +36,13 @@
                 <strong>Ende:</strong> {{ event.end | date:'medium' }}
               </p>
               <p class="text-gray-600 dark:text-gray-300">
-                <strong>Ort:</strong> {{ event.location }}
+                <strong>Ort:</strong> 
+                <a [href]="getGoogleMapsLink(event.location)" 
+                   target="_blank" 
+                   rel="noopener noreferrer" 
+                   class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-200">
+                  {{ event.location }}
+                </a>
               </p>
               <p class="text-gray-600 dark:text-gray-300">
                 <strong>Eintritt:</strong> {{ event.admissionFee ?? 'kostenlos' }}
