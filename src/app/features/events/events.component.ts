@@ -71,4 +71,9 @@ export class EventsComponent implements OnInit {
   closeFullscreenImage() {
     this.fullscreenImage = null;
   }
+
+  getGoogleMapsLink(location: string): string {
+    const encodedLocation = encodeURIComponent(location);
+    return `https://www.google.com/maps/search/?api=1&query=${encodedLocation}`;
+  }
 }
