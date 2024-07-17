@@ -49,7 +49,7 @@ export class EventFormComponent implements OnInit {
       location: ['', [Validators.required, Validators.maxLength(200)]],
       isWorkshop: [false],
       organizer: ['', [Validators.required, Validators.maxLength(100)]],
-      image: [''],
+      image: [null],
       isFullDay: [false],
       admissionFee: [null, [Validators.min(0), Validators.pattern(/^\d+(\.\d{1,2})?$/)]]
     });
@@ -128,17 +128,22 @@ export class EventFormComponent implements OnInit {
       if (this.imageFile) {
         imageUrl = await this.uploadImage();
       }
-
+  
       const eventData: PabailarEvent = {
         ...this.event,
         ...formValue,
-        image: imageUrl,
         createdBy: this.created_by_admin ? "admin" : "user",
         accepted: this.created_by_admin,
         start: this.formatDateToGermanTimezone(formValue.start),
         end: this.formatDateToGermanTimezone(formValue.end),
         admissionFee: formValue.admissionFee ? parseFloat(formValue.admissionFee) : null
       };
+  
+      // Only include the image field if an image was uploaded
+      if (imageUrl) {
+        eventData.image = imageUrl;
+      }
+  
       this.formSubmit.emit(eventData);
       this.clearForm();
     }

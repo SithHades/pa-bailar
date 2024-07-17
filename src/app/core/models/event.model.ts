@@ -11,7 +11,7 @@ export interface PabailarEvent {
     createdBy: string;
     isWorkshop: boolean;
     organizer: string;
-    image: string | null;
+    image?: string | null;
     isFullDay: boolean;
     admissionFee: number | null;
   }
