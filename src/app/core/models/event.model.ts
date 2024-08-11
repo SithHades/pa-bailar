@@ -3,8 +3,8 @@ export interface PabailarEvent {
     $createdAt?: string;
     $updatedAt?: string;
     title: string;
-    start: string;
-    end: string;
+    start: Date;
+    end: Date;
     description: string;
     location: string;
     accepted: boolean;

@@ -36,15 +36,17 @@ export class EventFormComponent implements OnInit {
 
   ngOnInit() {
     if (this.event) {
-      this.eventForm.patchValue(this.event);
+      this.patchFormWithEvent(this.event);
     }
   }
 
   private initForm(): FormGroup {
     const form = this.fb.group({
       title: ['', [Validators.required, Validators.maxLength(100)]],
-      start: ['', [Validators.required, this.futureDateValidator()]],
-      end: ['', [Validators.required]],
+      startDate: ['', [Validators.required]],
+      startTime: ['', Validators.required],
+      endDate: ['', [Validators.required]],
+      endTime: ['', Validators.required],
       description: ['', [Validators.required, Validators.maxLength(500)]],
       location: ['', [Validators.required, Validators.maxLength(200)]],
       isWorkshop: [false],
@@ -54,46 +56,55 @@ export class EventFormComponent implements OnInit {
       admissionFee: [null, [Validators.min(0), Validators.pattern(/^\d+(\.\d{1,2})?$/)]]
     });
 
-    // Add end date validator after form is created
-    form.get('end')?.addValidators(this.endDateValidator(form));
-
-    // Update end date validation when start date changes
-    form.get('start')?.valueChanges.subscribe(() => {
-      form.get('end')?.updateValueAndValidity();
-    });
-
-    // Update time inputs when isFullDay changes
+    form.get('startDate')?.valueChanges.subscribe(() => this.updateEndDate());
+    form.get('startTime')?.valueChanges.subscribe(() => this.updateEndTime());
     form.get('isFullDay')?.valueChanges.subscribe((isFullDay) => {
       if (isFullDay) {
-        form.get('start')?.setValue(this.formatDateToGermanMidnight(form.get('start')?.value));
-        form.get('end')?.setValue(this.formatDateToGermanMidnight(form.get('end')?.value));
+        form.patchValue({
+          startTime: '00:00',
+          endTime: '23:59'
+        });
       }
     });
 
     return form;
   }
 
-  futureDateValidator() {
-    return (control: AbstractControl): {[key: string]: any} | null => {
-      const currentDate = new Date();
-      const inputDate = new Date(control.value);
-      return inputDate > currentDate ? null : { 'pastDate': true };
-    };
+  private patchFormWithEvent(event: PabailarEvent) {
+    const startDate = new Date(event.start);
+    const endDate = new Date(event.end);
+
+    this.eventForm.patchValue({
+      ...event,
+      startDate: this.formatDateForInput(startDate),
+      startTime: this.formatTimeForInput(startDate),
+      endDate: this.formatDateForInput(endDate),
+      endTime: this.formatTimeForInput(endDate)
+    });
   }
 
-  endDateValidator(form: FormGroup) {
-    return (control: AbstractControl): {[key: string]: any} | null => {
-      const startDate = new Date(form.get('start')?.value);
-      const endDate = new Date(control.value);
-      return endDate > startDate ? null : { 'endDateBeforeStart': true };
-    };
+  private formatDateForInput(date: Date): string {
+    return date.toISOString().split('T')[0];
   }
 
-  formatDateToGermanMidnight(date: string | null | undefined): string {
-    if (!date) return '';
-    const d = new Date(date);
-    d.setHours(0, 0, 0, 0);
-    return d.toISOString().slice(0, 16); // Format as YYYY-MM-DDTHH:mm
+  private formatTimeForInput(date: Date): string {
+    return date.toTimeString().slice(0, 5);
+  }
+
+  updateEndDate() {
+    const startDate = this.eventForm.get('startDate')?.value;
+    if (startDate) {
+      this.eventForm.patchValue({ endDate: startDate });
+    }
+  }
+
+  updateEndTime() {
+    const startTime = this.eventForm.get('startTime')?.value;
+    if (startTime) {
+      const [hours, minutes] = startTime.split(':');
+      const endTime = new Date(2000, 0, 1, +hours + 1, +minutes);
+      this.eventForm.patchValue({ endTime: endTime.toTimeString().slice(0, 5) });
+    }
   }
 
   onFileSelected(event: Event) {
@@ -129,34 +140,61 @@ export class EventFormComponent implements OnInit {
         imageUrl = await this.uploadImage();
       }
   
-      const eventData: PabailarEvent = {
+      const startDateTime = this.combineDateAndTime(formValue.startDate, formValue.startTime);
+      const endDateTime = this.combineDateAndTime(formValue.endDate, formValue.endTime);
+
+      if (!this.isValidDateRange(startDateTime, endDateTime)) {
+        console.error('Invalid date range');
+        console.log('Start:', startDateTime, 'End:', endDateTime);
+        return;
+      }
+      delete formValue.startDate;
+      delete formValue.startTime;
+      delete formValue.endDate;
+      delete formValue.endTime;
+      let eventData: PabailarEvent = {
         ...this.event,
         ...formValue,
         createdBy: this.created_by_admin ? "admin" : "user",
         accepted: this.created_by_admin,
-        start: this.formatDateToGermanTimezone(formValue.start),
-        end: this.formatDateToGermanTimezone(formValue.end),
+        start: this.formatDateToGermanTimezone(startDateTime),
+        end: this.formatDateToGermanTimezone(endDateTime),
         admissionFee: formValue.admissionFee ? parseFloat(formValue.admissionFee) : null
       };
-  
-      // Only include the image field if an image was uploaded
+
       if (imageUrl) {
         eventData.image = imageUrl;
-      }
-  
+      }  
       this.formSubmit.emit(eventData);
       this.clearForm();
+    } else {
+      console.error('Form is invalid', this.eventForm.errors);
+      Object.keys(this.eventForm.controls).forEach(key => {
+        const control = this.eventForm.get(key);
+        if (control?.invalid) {
+          console.error(key, control.errors);
+        }
+      });
     }
   }
 
-  formatDateToGermanTimezone(date: string | null | undefined): string {
-    if (!date) return '';
-    const d = new Date(date);
-    return d.toLocaleString('de-DE', { timeZone: 'Europe/Berlin' });
+  combineDateAndTime(date: string, time: string): Date {
+    const [day, month, year] = date.split('.').map(Number);
+    const [hours, minutes] = time.split(':').map(Number);
+    return new Date(year, month - 1, day, hours, minutes);
+  }
+
+  isValidDateRange(start: Date, end: Date): boolean {
+    const now = new Date();
+    return start < end && start >= now;
+  }
+
+  formatDateToGermanTimezone(date: Date): string {
+    return date.toLocaleString('de-DE', { timeZone: 'Europe/Berlin' });
   }
 
   clearForm() {
-    this.eventForm = this.initForm();
+    this.eventForm.reset();
     this.imageFile = null;
     if (this.event) {
       this.event = null;
