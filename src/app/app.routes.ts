@@ -12,6 +12,10 @@ import { AdminLoginComponent } from './features/admin/login/admin-login.componen
 import { AdminDashboardComponent } from './features/admin/dashboard/admin-dashboard.component'
 import { EventManagementComponent } from './features/admin/dashboard/events/management/event-management.component'
 import { EventProposalListComponent } from './features/admin/dashboard/events/proposal-list/event-proposal-list.component'
+import { ConnectComponent } from './features/connect/connect.component'
+import { RoomsComponent } from './features/rooms/rooms.component'
+import { WikiComponent } from './features/wiki/wiki.component'
+import { CoursesComponent } from './features/courses/courses.component'
 
 export const routes: Routes = [
     {
@@ -47,6 +51,26 @@ export const routes: Routes = [
         canActivate: [MaintenanceGuard],
     },
     {
+        path: 'connect',
+        component: ConnectComponent,
+        canActivate: [MaintenanceGuard],
+    },
+    {
+        path: 'rooms',
+        component: RoomsComponent,
+        canActivate: [MaintenanceGuard],
+    },
+    {
+        path: 'wiki',
+        component: WikiComponent,
+        canActivate: [MaintenanceGuard],
+    },
+    {
+        path: 'kurse',
+        component: CoursesComponent,
+        canActivate: [MaintenanceGuard],
+    },
+    {
         path: 'admin/login',
         component: AdminLoginComponent,
     },
@@ -55,18 +79,18 @@ export const routes: Routes = [
         component: AdminDashboardComponent,
         canActivate: [AdminAuthGuard],
         children: [
-          {
-            path: 'events',
-            component: EventManagementComponent,
-            canActivate: [AdminAuthGuard],
-          },
-          {
-            path: 'proposals',
-            component: EventProposalListComponent,
-            canActivate: [AdminAuthGuard],
-          }
-        ]
-      },
+            {
+                path: 'events',
+                component: EventManagementComponent,
+                canActivate: [AdminAuthGuard],
+            },
+            {
+                path: 'proposals',
+                component: EventProposalListComponent,
+                canActivate: [AdminAuthGuard],
+            },
+        ],
+    },
     {
         path: '**',
         redirectTo: 'error',

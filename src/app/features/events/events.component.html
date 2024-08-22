@@ -1,70 +1,298 @@
 <div class="container mx-auto px-4 py-8">
-  <h1 class="text-3xl font-bold mb-8 text-gray-800 dark:text-white">Community Events</h1>
-
-  <!-- Timeline of events -->
-  <div class="relative">
-    <div class="absolute left-0 top-0 ml-4 h-full w-0.5 bg-gray-200 dark:bg-gray-700"></div>
-    <div class="space-y-8">
-      <div *ngFor="let event of events" class="relative pl-8">
-        <div class="absolute left-0 top-2 -ml-1.5 h-3 w-3 rounded-full bg-blue-500"></div>
-        <div class="event-container bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden transition-all duration-300 ease-in-out" 
-             [class.expanded]="isEventExpanded(event.$id!)"
-             (click)="toggleEventDetails(event.$id!)">
-          
-             <div *ngIf="isEventExpanded(event.$id!) && event.image" class="relative">
-              <img [src]="getTransformedImageUrl(event.image, 800, 400)" 
-                   alt="Event image" 
-                   class="w-full h-48 object-cover">
-              <button (click)="openFullscreenImage(event.image, $event)" 
-                      class="fullscreen-button absolute top-2 right-2 bg-white rounded-full p-1 shadow-md hover:bg-gray-100 focus:outline-none">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                </svg>
-              </button>
-            </div>
-
-          <div class="p-4">
-            <h3 class="text-lg font-semibold text-gray-800 dark:text-white">{{ event.title }}</h3>
-            <p class="text-sm text-gray-600 dark:text-gray-300">{{ event.start | date:'medium' }}</p>
-            <p class="text-sm text-gray-500 dark:text-gray-400 mt-2" [class.line-clamp-2]="!isEventExpanded(event.$id!)">
-              {{ event.description }}
+    <header class="bg-white dark:bg-gray-900">
+        <div class="max-w-screen-xl px-4 py-8 mx-auto">
+            <h1
+                class="text-4xl font-extrabold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
+                Tanzveranstaltungen & Socials in Kiel bei Pa'bailar finden
+            </h1>
+            <p
+                class="mt-4 text-lg font-normal text-gray-500 lg:text-xl dark:text-gray-400">
+                Entdecke die besten Tanzveranstaltungen in Kiel und erlebe die
+                vibrierende SBK-Szene.
             </p>
-            
-            <!-- Expanded content -->
-            <div *ngIf="isEventExpanded(event.$id!)" class="mt-4 space-y-2">
-              <p class="text-gray-600 dark:text-gray-300">
-                <strong>Ende:</strong> {{ event.end | date:'medium' }}
-              </p>
-              <p class="text-gray-600 dark:text-gray-300">
-                <strong>Ort:</strong> 
-                <a [href]="getGoogleMapsLink(event.location)" 
-                   target="_blank" 
-                   rel="noopener noreferrer" 
-                   class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-200">
-                  {{ event.location }}
-                </a>
-              </p>
-              <p class="text-gray-600 dark:text-gray-300">
-                <strong>Eintritt:</strong> {{ event.admissionFee ?? 'kostenlos' }}
-              </p>
-              <p class="text-gray-600 dark:text-gray-300">
-                <strong>Veranstalter:</strong> {{ event.organizer }}
-              </p>
-            </div>
-          </div>
+            <h2
+                class="mb-4 text-3xl py-4 font-extrabold text-gray-900 dark:text-white">
+                Entdecke die besten Tanzveranstaltungen in Kiel
+            </h2>
+            <p class="mb-4 text-lg text-gray-500 dark:text-gray-400">
+                Wird in Kiel überhaupt getanzt? Kiel ist zwar nicht die
+                klassische Tanzmetropole verglichen zu Großstädten wie Hamburg.
+                Aber klar, auch hier wird getanzt und zwar gar nicht so wenig.
+                Tatsächlich gibt es in Kiel eine spannende Tanzszene, die mehr
+                zu bieten hat, als man auf den ersten Blick vermuten würde.
+            </p>
+            <p class="mb-4 text-lg text-gray-500 dark:text-gray-400">
+                Um sicherzustellen, dass du immer bestens über die
+                Tanzveranstaltungen in Kiel informiert bist, bietet Pa'bailar
+                eine umfassende Übersicht über alle relevanten Events. Egal, ob
+                du auf der Suche nach den neuesten Salsa-Events, aufregenden
+                Bachata-Partys oder mitreißenden Kizomba-Socials bist – wir
+                haben alle Informationen, die du brauchst. Unser Kalender hält
+                dich auf dem Laufenden über die heißesten Tanzparties.
+            </p>
         </div>
-      </div>
+    </header>
+
+    <!-- Timeline of events -->
+    <div class="relative">
+        <div
+            class="absolute left-0 top-0 ml-4 h-full w-0.5 bg-gray-200 dark:bg-gray-700"></div>
+        <div class="space-y-8">
+            <div *ngFor="let event of events" class="relative pl-8">
+                <div
+                    class="absolute left-0 top-2 -ml-1.5 h-3 w-3 rounded-full bg-blue-500"></div>
+                <div
+                    class="event-container bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden transition-all duration-300 ease-in-out"
+                    [class.expanded]="isEventExpanded(event.$id!)"
+                    (click)="toggleEventDetails(event.$id!)">
+                    <div
+                        *ngIf="isEventExpanded(event.$id!) && event.image"
+                        class="relative">
+                        <img
+                            [src]="
+                                getTransformedImageUrl(event.image, 800, 400)
+                            "
+                            alt="Event image"
+                            class="w-full h-48 object-cover" />
+                        <button
+                            (click)="openFullscreenImage(event.image, $event)"
+                            class="fullscreen-button absolute top-2 right-2 bg-white rounded-full p-1 shadow-md hover:bg-gray-100 focus:outline-none">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                class="h-6 w-6 text-gray-600"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                            </svg>
+                        </button>
+                    </div>
+
+                    <div class="p-4">
+                        <h3
+                            class="text-lg font-semibold text-gray-800 dark:text-white">
+                            {{ event.title }}
+                        </h3>
+                        <p class="text-sm text-gray-600 dark:text-gray-300">
+                            {{ event.start | date : 'medium' }}
+                        </p>
+                        <p
+                            class="text-sm text-gray-500 dark:text-gray-400 mt-2"
+                            [class.line-clamp-2]="!isEventExpanded(event.$id!)">
+                            {{ event.description }}
+                        </p>
+
+                        <!-- Expanded content -->
+                        <div
+                            *ngIf="isEventExpanded(event.$id!)"
+                            class="mt-4 space-y-2">
+                            <p class="text-gray-600 dark:text-gray-300">
+                                <strong>Ende:</strong>
+                                {{ event.end | date : 'medium' }}
+                            </p>
+                            <p class="text-gray-600 dark:text-gray-300">
+                                <strong>Ort:</strong>
+                                <a
+                                    [href]="getGoogleMapsLink(event.location)"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-200">
+                                    {{ event.location }}
+                                </a>
+                            </p>
+                            <p class="text-gray-600 dark:text-gray-300">
+                                <strong>Eintritt:</strong>
+                                {{ event.admissionFee ?? 'kostenlos' }}
+                            </p>
+                            <p class="text-gray-600 dark:text-gray-300">
+                                <strong>Veranstalter:</strong>
+                                {{ event.organizer }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
 
-  <!-- Fullscreen Image Modal -->
-  <div *ngIf="fullscreenImage" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50" (click)="closeFullscreenImage()">
-    <img [src]="fullscreenImage" alt="Fullscreen event image" class="max-w-full max-h-full object-contain">
-  </div>
+    <!-- Fullscreen Image Modal -->
+    <div
+        *ngIf="fullscreenImage"
+        class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50"
+        (click)="closeFullscreenImage()">
+        <img
+            [src]="fullscreenImage"
+            alt="Fullscreen event image"
+            class="max-w-full max-h-full object-contain" />
+    </div>
 
-  <!-- New event form -->
-  <div class="mt-12 bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-    <h2 class="text-2xl font-bold mb-4 text-gray-800 dark:text-white">Schlag ein neues Event vor.</h2>
-    <app-event-form (formSubmit)="onNewEventSubmit($event)"></app-event-form>
-  </div>
+    <!-- New event form -->
+    <div class="mt-12 bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+        <h2 class="text-2xl font-bold mb-4 text-gray-800 dark:text-white">
+            Schlag ein neues Event vor.
+        </h2>
+        <app-event-form
+            (formSubmit)="onNewEventSubmit($event)"></app-event-form>
+    </div>
+
+    <section class="bg-white pt-8 dark:bg-gray-900">
+        <div class="max-w-screen-xl px-4 py-8 mx-auto">
+            <h2
+                class="mb-4 text-3xl font-extrabold text-gray-900 dark:text-white">
+                So funktioniert der Eventkalender
+            </h2>
+            <!-- Placeholder for video -->
+            <div class="my-8 aspect-w-16 aspect-h-9">
+                <iframe
+                    class="w-full h-full"
+                    src="https://www.youtube.com/embed/your-video-id"
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen></iframe>
+            </div>
+            <p class="mb-4 text-lg text-gray-500 dark:text-gray-400">
+                Salsa Kiel heute? Kein Problem! Unsere Plattform hält dich auf
+                dem Laufenden über die aktuellen Salsa-Veranstaltungen in Kiel.
+                Ob du kurzfristig eine Party suchst oder deine Woche planen
+                möchtest, Pa'bailar bietet dir alle nötigen Details. Spannenden
+                Salsa-Tanzabenden im Blauen Engel, in der Pumpe, oder
+                mitreißenden Salsa, Bachata und Kizomba-Events an der Kiellinie–
+                unsere Plattform hält alle wichtigen Informationen für dich
+                bereit.
+            </p>
+            <!-- Placeholder for images -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 my-8">
+                <div class="bg-gray-200 dark:bg-gray-700 h-48 rounded-lg"></div>
+                <div class="bg-gray-200 dark:bg-gray-700 h-48 rounded-lg"></div>
+                <div class="bg-gray-200 dark:bg-gray-700 h-48 rounded-lg"></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="bg-white dark:bg-gray-900">
+        <div class="max-w-screen-xl px-4 py-8 mx-auto">
+            <h2
+                class="mb-4 text-3xl font-extrabold text-gray-900 dark:text-white">
+                Warum Pa'bailar Eventkalender?
+            </h2>
+            <ul class="space-y-4 text-gray-500 dark:text-gray-400">
+                <li class="flex items-center space-x-3">
+                    <svg
+                        class="flex-shrink-0 w-5 h-5 text-green-500 dark:text-green-400"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            fill-rule="evenodd"
+                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                            clip-rule="evenodd"></path>
+                    </svg>
+                    <span
+                        >Aktuelle Events: Bleibe immer auf dem neuesten Stand
+                        und entdecke die neuesten Tanzveranstaltungen in Kiel,
+                        die dir eine tolle Gelegenheit bieten, dein Tanzkönnen
+                        unter Beweis zu stellen und neue Tänzerinnen und Tänzer
+                        zu treffen.</span
+                    >
+                </li>
+                <li class="flex items-center space-x-3">
+                    <svg
+                        class="flex-shrink-0 w-5 h-5 text-green-500 dark:text-green-400"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            fill-rule="evenodd"
+                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                            clip-rule="evenodd"></path>
+                    </svg>
+                    <span
+                        >Vielfalt an Veranstaltungen: Finde eine breite Palette
+                        an SBK-Tanzveranstaltungen, von regelmäßigen Tanzabenden
+                        bis hin zu speziellen Socials und Workshops, die sowohl
+                        Anfänger als auch Fortgeschrittene begeistern.</span
+                    >
+                </li>
+                <li class="flex items-center space-x-3">
+                    <svg
+                        class="flex-shrink-0 w-5 h-5 text-green-500 dark:text-green-400"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            fill-rule="evenodd"
+                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                            clip-rule="evenodd"></path>
+                    </svg>
+                    <span
+                        >Details und Informationen: Unser Kalender bietet
+                        detaillierte Informationen zu jedem Event,
+                        einschließlich Datum, Uhrzeit, Location und besonderen
+                        Highlights, damit du das passende Event für dich
+                        auswählen kannst.</span
+                    >
+                </li>
+                <li class="flex items-center space-x-3">
+                    <svg
+                        class="flex-shrink-0 w-5 h-5 text-green-500 dark:text-green-400"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            fill-rule="evenodd"
+                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                            clip-rule="evenodd"></path>
+                    </svg>
+                    <span
+                        >Socials sind das Herzstück des SBK-Tanzes. Sie bieten
+                        dir die Plattform, um deine Fähigkeiten zu verbessern,
+                        das Gelernte direkt anzuwenden.</span
+                    >
+                </li>
+            </ul>
+            <p class="mt-4 text-lg text-gray-500 dark:text-gray-400">
+                Nutze die umfassenden Informationen auf Pa'bailar und sei immer
+                bestens informiert über die besten Tanzveranstaltungen in Kiel.
+                Gemeinsam tanzen, feiern und neue Tanzfreunde finden – mit
+                Pa'bailar wird dein Tanzleben in Kiel lebendig!
+            </p>
+        </div>
+    </section>
+
+    <section class="bg-gray-50 dark:bg-gray-800 rounded-2xl">
+        <div class="max-w-screen-xl px-4 py-8 mx-auto">
+            <h2
+                class="mb-4 text-3xl font-extrabold text-gray-900 dark:text-white">
+                Noch nicht bereit für eine Tanzveranstaltung in Kiel?
+            </h2>
+            <p class="mb-4 text-lg text-gray-500 dark:text-gray-400">
+                Fühlst du dich noch nicht ganz bereit für Socials? Das kann
+                verschiedene Gründe haben. Vielleicht fehlt dir noch das nötige
+                Wissen über den Tanz oder du fühlst dich unsicher, wenn du
+                alleine zu Events gehst.
+            </p>
+            <p class="mb-4 text-lg text-gray-500 dark:text-gray-400">
+                Wenn du deine Tanzfähigkeiten verbessern möchtest, findest du
+                bei uns eine Vielzahl an Tanzkursen in Kiel (Link folgt), die
+                dir helfen, dein Können aufzufrischen und zu erweitern. Sollte
+                es dir schwerfallen, allein zu Veranstaltungen zu gehen, schau
+                dir unsere
+                <a
+                    href="/connect"
+                    class="text-blue-600 hover:underline dark:text-blue-500"
+                    >Pa'bailar Connect-Funktion</a
+                >
+                an. Hier kannst du andere Tänzerinnen und Tänzer aus Kiel
+                kennenlernen und dich für Socials verabreden.
+            </p>
+            <p class="text-lg text-gray-500 dark:text-gray-400">
+                Nutze diese Möglichkeiten, um dich sicherer zu fühlen und dein
+                Tanzabenteuer mit Gleichgesinnten zu genießen!
+            </p>
+        </div>
+    </section>
 </div>
