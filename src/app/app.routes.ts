@@ -67,7 +67,7 @@ export const routes: Routes = [
     },
     {
         path: 'kurse',
-        component: CoursesComponent,
+        component: MaintenanceComponent,
         canActivate: [MaintenanceGuard],
     },
     {

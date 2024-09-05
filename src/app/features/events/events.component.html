@@ -30,14 +30,27 @@
                 haben alle Informationen, die du brauchst. Unser Kalender hält
                 dich auf dem Laufenden über die heißesten Tanzparties.
             </p>
+            <p class="mb-4 text-lg text-gray-500 dark:text-gray-400">
+                Darüber hinaus hast du die Möglichkeit, selbst Events zu
+                erstellen und einzutragen. Diese Events werden von uns
+                sorgfältig geprüft und nach Freigabe für alle sichtbar gemacht,
+                So tragen wir gemeinsam dazu bei, die Tanz-Community in Kiel
+                lebendig und vielfältig zu gestalten.
+            </p>
         </div>
     </header>
 
     <!-- Timeline of events -->
     <div class="relative">
-        <div
-            class="absolute left-0 top-0 ml-4 h-full w-0.5 bg-gray-200 dark:bg-gray-700"></div>
+        <!-- <div
+            class="absolute left-0 top-0 ml-4 h-full w-0.5 bg-gray-200 dark:bg-gray-700"></div> -->
         <div class="space-y-8">
+            @if (events.length === 0) {
+            <p class="text-lg text-gray-500 dark:text-gray-400">
+                Es gibt noch keine Events. Sei der Erste und schlage ein neues
+                Event vor!
+            </p>
+            }
             <div *ngFor="let event of events" class="relative pl-8">
                 <div
                     class="absolute left-0 top-2 -ml-1.5 h-3 w-3 rounded-full bg-blue-500"></div>
@@ -108,10 +121,12 @@
                                 <strong>Eintritt:</strong>
                                 {{ event.admissionFee ?? 'kostenlos' }}
                             </p>
+                            @if (event.organizer) {
                             <p class="text-gray-600 dark:text-gray-300">
                                 <strong>Veranstalter:</strong>
                                 {{ event.organizer }}
                             </p>
+                            }
                         </div>
                     </div>
                 </div>
