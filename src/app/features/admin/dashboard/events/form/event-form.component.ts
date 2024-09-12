@@ -4,6 +4,7 @@ import {
     FormGroup,
     Validators,
     AbstractControl,
+    ValidatorFn,
 } from '@angular/forms'
 import { PabailarEvent } from '../../../../../core/models/event.model'
 import { CommonModule } from '@angular/common'
@@ -50,9 +51,12 @@ export class EventFormComponent implements OnInit {
     private initForm(): FormGroup {
         const form = this.fb.group({
             title: ['', [Validators.required, Validators.maxLength(100)]],
-            startDate: ['', [Validators.required]],
+            startDate: [
+                '',
+                [Validators.required, this.dateNotInPastValidator()],
+            ],
             startTime: ['', Validators.required],
-            endDate: ['', [Validators.required]],
+            endDate: ['', [Validators.required, this.dateNotInPastValidator()]],
             endTime: ['', Validators.required],
             description: ['', [Validators.required, Validators.maxLength(500)]],
             location: ['', [Validators.required, Validators.maxLength(200)]],
@@ -94,6 +98,27 @@ export class EventFormComponent implements OnInit {
             endDate: this.formatDateForInput(endDate),
             endTime: this.formatTimeForInput(endDate),
         })
+    }
+
+    dateNotInPastValidator(): ValidatorFn {
+        return (control: AbstractControl): { [key: string]: any } | null => {
+            const selectedDate = new Date(control.value)
+            const currentDate = new Date()
+            currentDate.setHours(0, 0, 0, 0) // Set time to beginning of the day for fair comparison
+            return selectedDate < currentDate
+                ? { dateInPast: { value: control.value } }
+                : null
+        }
+    }
+
+    dateRangeValidator(form: FormGroup): { [key: string]: any } | null {
+        const startDate = new Date(
+            form.get('startDate')?.value + 'T' + form.get('startTime')?.value
+        )
+        const endDate = new Date(
+            form.get('endDate')?.value + 'T' + form.get('endTime')?.value
+        )
+        return startDate >= endDate ? { invalidDateRange: true } : null
     }
 
     private formatDateForInput(date: Date): string {

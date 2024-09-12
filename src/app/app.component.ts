@@ -1,13 +1,14 @@
 import { Component } from '@angular/core'
-import { CommonModule , registerLocaleData} from '@angular/common'
+import { CommonModule, registerLocaleData } from '@angular/common'
 import { RouterOutlet } from '@angular/router'
 import { FooterComponent } from './shared/components/footer/footer.component'
 import { MenuComponent } from './shared/components/menu/menu.component'
 import { HttpClientModule } from '@angular/common/http'
-import localeDe from '@angular/common/locales/de';
-import localeDeExtra from '@angular/common/locales/extra/de';
+import localeDe from '@angular/common/locales/de'
+import localeDeExtra from '@angular/common/locales/extra/de'
 import { AuthService } from './core/services/auth.service'
 import { filter, switchMap } from 'rxjs'
+import { initFlowbite } from 'flowbite'
 
 @Component({
     selector: 'app-root',
@@ -28,11 +29,18 @@ export class AppComponent {
     }
 
     ngOnInit() {
-        this.authService.isInitialCheckComplete().pipe(
-            filter(complete => complete),
-            switchMap(() => this.authService.isAdminLoggedIn())
-        ).subscribe((isLoggedIn) => {
-            console.log('Initial session check complete, logged in:', isLoggedIn);
-        });
+        this.authService
+            .isInitialCheckComplete()
+            .pipe(
+                filter(complete => complete),
+                switchMap(() => this.authService.isAdminLoggedIn())
+            )
+            .subscribe(isLoggedIn => {
+                console.log(
+                    'Initial session check complete, logged in:',
+                    isLoggedIn
+                )
+            })
+        initFlowbite()
     }
 }
