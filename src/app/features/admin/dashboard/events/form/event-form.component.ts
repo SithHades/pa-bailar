@@ -58,7 +58,10 @@ export class EventFormComponent implements OnInit {
             startTime: ['', Validators.required],
             endDate: ['', [Validators.required, this.dateNotInPastValidator()]],
             endTime: ['', Validators.required],
-            description: ['', [Validators.required, Validators.maxLength(500)]],
+            description: [
+                '',
+                [Validators.required, Validators.maxLength(4096)],
+            ],
             location: ['', [Validators.required, Validators.maxLength(200)]],
             organizer: ['', [Validators.required, Validators.maxLength(100)]],
             image: [null],
