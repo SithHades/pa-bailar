@@ -18,81 +18,81 @@ import { WikiComponent } from './features/wiki/wiki.component'
 import { CoursesComponent } from './features/courses/courses.component'
 
 export const routes: Routes = [
-    {
-        path: '',
-        component: HomeComponent,
-        canActivate: [MaintenanceGuard],
-        pathMatch: 'full',
-    },
-    {
-        path: 'maintenance',
-        component: MaintenanceComponent,
-    },
-    {
-        path: 'error',
-        component: ErrorComponent,
-        canActivate: [MaintenanceGuard],
-    },
-    {
-        path: 'privacy',
-        component: TermOfPrivacyComponent,
-    },
-    {
-        path: 'terms',
-        component: TermOfServiceComponent,
-    },
-    {
-        path: 'imprint',
-        component: ImprintComponent,
-    },
-    {
+  {
+    path: '',
+    component: HomeComponent,
+    canActivate: [MaintenanceGuard],
+    pathMatch: 'full',
+  },
+  {
+    path: 'maintenance',
+    component: MaintenanceComponent,
+  },
+  {
+    path: 'error',
+    component: ErrorComponent,
+    canActivate: [MaintenanceGuard],
+  },
+  {
+    path: 'privacy',
+    component: TermOfPrivacyComponent,
+  },
+  {
+    path: 'terms',
+    component: TermOfServiceComponent,
+  },
+  {
+    path: 'imprint',
+    component: ImprintComponent,
+  },
+  {
+    path: 'events',
+    component: EventsComponent,
+    canActivate: [MaintenanceGuard],
+  },
+  {
+    path: 'connect',
+    component: ConnectComponent,
+    canActivate: [MaintenanceGuard],
+  },
+  {
+    path: 'rooms',
+    component: RoomsComponent,
+    canActivate: [MaintenanceGuard],
+  },
+  {
+    path: 'wiki',
+    component: WikiComponent,
+    canActivate: [MaintenanceGuard],
+  },
+  {
+    path: 'kurse',
+    component: MaintenanceComponent,
+    canActivate: [MaintenanceGuard],
+  },
+  {
+    path: 'admin/login',
+    component: AdminLoginComponent,
+  },
+  {
+    path: 'admin',
+    component: AdminDashboardComponent,
+    canActivate: [AdminAuthGuard],
+    children: [
+      {
         path: 'events',
-        component: EventsComponent,
-        canActivate: [MaintenanceGuard],
-    },
-    {
-        path: 'connect',
-        component: ConnectComponent,
-        canActivate: [MaintenanceGuard],
-    },
-    {
-        path: 'rooms',
-        component: RoomsComponent,
-        canActivate: [MaintenanceGuard],
-    },
-    {
-        path: 'wiki',
-        component: WikiComponent,
-        canActivate: [MaintenanceGuard],
-    },
-    {
-        path: 'kurse',
-        component: MaintenanceComponent,
-        canActivate: [MaintenanceGuard],
-    },
-    {
-        path: 'admin/login',
-        component: AdminLoginComponent,
-    },
-    {
-        path: 'admin',
-        component: AdminDashboardComponent,
+        component: EventManagementComponent,
         canActivate: [AdminAuthGuard],
-        children: [
-            {
-                path: 'events',
-                component: EventManagementComponent,
-                canActivate: [AdminAuthGuard],
-            },
-            {
-                path: 'proposals',
-                component: EventProposalListComponent,
-                canActivate: [AdminAuthGuard],
-            },
-        ],
-    },
-    {
-        path: '**',
-        redirectTo: 'error',
-    },
+      },
+      {
+        path: 'proposals',
+        component: EventProposalListComponent,
+        canActivate: [AdminAuthGuard],
+      },
+    ],
+  },
+  {
+    path: '**',
+    redirectTo: 'error',
+  },
 ]

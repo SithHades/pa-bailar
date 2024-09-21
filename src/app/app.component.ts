@@ -11,36 +11,33 @@ import { filter, switchMap } from 'rxjs'
 import { initFlowbite } from 'flowbite'
 
 @Component({
-    selector: 'app-root',
-    standalone: true,
-    templateUrl: './app.component.html',
-    styleUrls: ['./app.component.scss'],
-    imports: [
-        CommonModule,
-        RouterOutlet,
-        HttpClientModule,
-        FooterComponent,
-        MenuComponent,
-    ],
+  selector: 'app-root',
+  standalone: true,
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss'],
+  imports: [
+    CommonModule,
+    RouterOutlet,
+    HttpClientModule,
+    FooterComponent,
+    MenuComponent,
+  ],
 })
 export class AppComponent {
-    constructor(private authService: AuthService) {
-        registerLocaleData(localeDe, 'de-DE', localeDeExtra)
-    }
+  constructor(private authService: AuthService) {
+    registerLocaleData(localeDe, 'de-DE', localeDeExtra)
+  }
 
-    ngOnInit() {
-        this.authService
-            .isInitialCheckComplete()
-            .pipe(
-                filter(complete => complete),
-                switchMap(() => this.authService.isAdminLoggedIn())
-            )
-            .subscribe(isLoggedIn => {
-                console.log(
-                    'Initial session check complete, logged in:',
-                    isLoggedIn
-                )
-            })
-        initFlowbite()
-    }
+  ngOnInit() {
+    this.authService
+      .isInitialCheckComplete()
+      .pipe(
+        filter(complete => complete),
+        switchMap(() => this.authService.isAdminLoggedIn())
+      )
+      .subscribe(isLoggedIn => {
+        console.log('Initial session check complete, logged in:', isLoggedIn)
+      })
+    initFlowbite()
+  }
 }

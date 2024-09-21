@@ -8,7 +8,8 @@
     "watch": "ng build --watch --configuration development",
     "lint": "ng lint --fix",
     "prepare": "husky install",
-    "pretty-quick": "pretty-quick --staged"
+    "pretty-quick": "pretty-quick --staged",
+    "prettier": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,scss,md}\""
   },
   "private": true,
   "dependencies": {
