@@ -32,10 +32,9 @@
 
 <section class="bg-gray-50 dark:bg-gray-800">
     <div class="max-w-screen-xl px-4 py-8 mx-auto">
-        <h2 class="mb-4 text-3xl font-extrabold text-gray-900 dark:text-white">
+        <!-- <h2 class="mb-4 text-3xl font-extrabold text-gray-900 dark:text-white">
             So funktioniert das Suchen und Buchen von Tanzräumen
         </h2>
-        <!-- Placeholder for video -->
         <div class="my-8 aspect-w-16 aspect-h-9">
             <iframe
                 class="w-full h-full"
@@ -43,17 +42,31 @@
                 frameborder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowfullscreen></iframe>
-        </div>
-        <!-- Placeholder for Anny -->
+        </div> -->
+        @if (scriptsLoaded) {
         <div class="my-8 p-4 bg-white dark:bg-gray-700 rounded-lg shadow-md">
-            <p class="text-center text-gray-600 dark:text-gray-300">
-                Anny wird hier eingefügt
-            </p>
+            <a-organization-page
+                base-url="https://anny.co/b"
+                organization="pabailar"
+                placeholder-title="Pa'bailar"
+                hide-resource-header="false"
+                hide-organization-header="false"
+                should-login="false"
+                entity-id=""
+                locale="de"
+                default-list="resources"
+                primary-color="#7a0638"
+                secondary-color="#fbf3fb"
+                primary-color-rgb="122, 6, 56"
+                primary-color-hover="#970745"
+                primary-color-overlay="rgba(122, 6, 56, 0.14)">
+            </a-organization-page>
         </div>
+        }
     </div>
 </section>
 
-<section class="bg-white dark:bg-gray-900">
+<!-- <section class="bg-white dark:bg-gray-900">
     <div class="max-w-screen-xl px-4 py-8 mx-auto">
         <h2 class="mb-4 text-3xl font-extrabold text-gray-900 dark:text-white">
             Übersicht aller Tanzräume Kiels
@@ -71,7 +84,6 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Example row, repeat for each studio -->
                     <tr
                         class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                         <th
@@ -93,7 +105,7 @@
             </table>
         </div>
     </div>
-</section>
+</section> -->
 
 <section class="bg-gray-50 dark:bg-gray-800">
     <div class="max-w-screen-xl px-4 py-8 mx-auto">

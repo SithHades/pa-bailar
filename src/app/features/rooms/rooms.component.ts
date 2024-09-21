@@ -1,5 +1,6 @@
-import { Component } from '@angular/core'
+import { Component, CUSTOM_ELEMENTS_SCHEMA, OnInit } from '@angular/core'
 import { Meta } from '@angular/platform-browser'
+import { ScriptLoaderService } from '../../core/services/script-loader.service'
 
 @Component({
     selector: 'app-rooms',
@@ -7,9 +8,12 @@ import { Meta } from '@angular/platform-browser'
     imports: [],
     templateUrl: './rooms.component.html',
     styleUrl: './rooms.component.scss',
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-export class RoomsComponent {
-    constructor(private meta: Meta) {
+export class RoomsComponent implements OnInit {
+    scriptsLoaded = false
+
+    constructor(private meta: Meta, private scriptLoader: ScriptLoaderService) {
         this.meta.addTag({
             name: 'description',
             content:
@@ -24,6 +28,21 @@ export class RoomsComponent {
             content:
                 'Tanzraum, Tanzraum mieten, Tanzraum Kiel, Tanzraum reservieren, Tanzraum buchen, Tanzraum für Selbstlerner, Tanzraum für Tanzgruppen',
         })
+    }
+
+    ngOnInit() {
+        Promise.all([
+            this.scriptLoader.loadScript(
+                'https://unpkg.com/vue@3/dist/vue.global.prod.js'
+            ),
+            this.scriptLoader.loadScript(
+                'https://cdn.anny.co/widget/annyComponents.umd.latest.min.js'
+            ),
+        ])
+            .then(() => {
+                this.scriptsLoaded = true
+            })
+            .catch(error => console.error('Error loading scripts', error))
     }
 }
 
