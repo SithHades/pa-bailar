@@ -1,17 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <title>Pa'bailar</title>
-        <base href="/" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" type="image/x-icon" href="favicon.ico" />
-        <script
-            defer
-            data-domain="pabailar.com"
-            src="https://plausible-us00k8o.kncklab.com/js/script.js"></script>
-    </head>
-    <body>
-        <app-root></app-root>
-    </body>
+  <head>
+    <meta charset="utf-8" />
+    <title>Pa'bailar</title>
+    <base href="/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    <script
+      defer
+      data-domain="pabailar.com"
+      src="https://plausible-us00k8o.kncklab.com/js/script.js"></script>
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="
+  default-src 'self'; 
+  frame-src https://plausible-us00k8o.kncklab.com https://cloud.appwrite.io; 
+  script-src 'self' https://plausible-us00k8o.kncklab.com https://cloud.appwrite.io; 
+  connect-src 'self' https://cloud.appwrite.io;
+  style-src 'self' 'unsafe-inline';
+  style-src-attr 'unsafe-inline';
+" />
+    <script
+      async
+      src="https://plausible-us00k8o.kncklab.com/js/embed.host.js"></script>
+  </head>
+  <body>
+    <app-root></app-root>
+  </body>
 </html>
