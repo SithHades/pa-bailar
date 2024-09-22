@@ -10,19 +10,20 @@
       defer
       data-domain="pabailar.com"
       src="https://plausible-us00k8o.kncklab.com/js/script.js"></script>
+    <script
+      async
+      src="https://plausible-us00k8o.kncklab.com/js/embed.host.js"></script>
     <meta
       http-equiv="Content-Security-Policy"
       content="
   default-src 'self'; 
   frame-src https://plausible-us00k8o.kncklab.com https://cloud.appwrite.io; 
-  script-src 'self' https://plausible-us00k8o.kncklab.com https://cloud.appwrite.io; 
+  script-src 'self' https://plausible-us00k8o.kncklab.com https://cloud.appwrite.io 'unsafe-inline' 'unsafe-eval';
   connect-src 'self' https://cloud.appwrite.io;
   style-src 'self' 'unsafe-inline';
   style-src-attr 'unsafe-inline';
 " />
-    <script
-      async
-      src="https://plausible-us00k8o.kncklab.com/js/embed.host.js"></script>
+    <link [attr.media]="'all'" />
   </head>
   <body>
     <app-root></app-root>
