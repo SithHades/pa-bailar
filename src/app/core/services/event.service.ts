@@ -71,10 +71,28 @@ export class EventService {
   }
 
   updateEvent(event: PabailarEvent): Observable<PabailarEvent> {
+    const updateEvent = {
+      title: event.title,
+      start: event.start,
+      end: event.end,
+      description: event.description,
+      location: event.location,
+      accepted: event.accepted,
+      createdBy: event.createdBy,
+      organizer: event.organizer,
+      image: event.image,
+      isFullDay: event.isFullDay,
+      admissionFee: event.admissionFee,
+    }
     return from(
       this.appwriteService
         .getDatabase()
-        .updateDocument(this.databaseId, this.collectionId, event.$id!, event)
+        .updateDocument(
+          this.databaseId,
+          this.collectionId,
+          event.$id!,
+          updateEvent
+        )
     ).pipe(map(response => response as unknown as PabailarEvent))
   }
 }

@@ -7,7 +7,7 @@ import {
   ValidatorFn,
 } from '@angular/forms'
 import { PabailarEvent } from '../../../../../core/models/event.model'
-import { CommonModule } from '@angular/common'
+import { CommonModule, DatePipe } from '@angular/common'
 import { ReactiveFormsModule } from '@angular/forms'
 import { AuthService } from '../../../../../core/services/auth.service'
 import { AppwriteService } from '../../../../../core/services/appwrite.service'
@@ -20,6 +20,7 @@ import { environment } from '../../../../../../environments/environment'
   templateUrl: './event-form.component.html',
   styleUrls: ['./event-form.component.scss'],
   imports: [CommonModule, ReactiveFormsModule],
+  providers: [DatePipe],
 })
 export class EventFormComponent implements OnInit {
   @Input() event: PabailarEvent | null = null
@@ -33,7 +34,8 @@ export class EventFormComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private appwriteService: AppwriteService
+    private appwriteService: AppwriteService,
+    private datePipe: DatePipe
   ) {
     this.eventForm = this.initForm()
     this.authService
@@ -85,11 +87,18 @@ export class EventFormComponent implements OnInit {
     const endDate = new Date(event.end)
 
     this.eventForm.patchValue({
-      ...event,
-      startDate: this.formatDateForInput(startDate),
-      startTime: this.formatTimeForInput(startDate),
-      endDate: this.formatDateForInput(endDate),
-      endTime: this.formatTimeForInput(endDate),
+      title: event.title,
+      startDate: this.datePipe.transform(startDate, 'dd.MM.yyyy') || '',
+      startTime: this.datePipe.transform(startDate, 'HH:mm') || '',
+      endDate: this.datePipe.transform(endDate, 'dd.MM.yyyy') || '',
+      endTime: this.datePipe.transform(endDate, 'HH:mm') || '',
+      description: event.description,
+      location: event.location,
+      organizer: event.organizer,
+      isFullDay: event.isFullDay,
+      admissionFee: event.admissionFee
+        ? event.admissionFee.toString().replace('.', ',')
+        : null,
     })
   }
 
