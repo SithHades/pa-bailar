@@ -16,6 +16,7 @@ import { ConnectComponent } from './features/connect/connect.component'
 import { RoomsComponent } from './features/rooms/rooms.component'
 import { WikiComponent } from './features/wiki/wiki.component'
 import { CoursesComponent } from './features/courses/courses.component'
+import { AnalyticsComponent } from './features/admin/dashboard/analytics/analytics.component'
 
 export const routes: Routes = [
   {
@@ -79,6 +80,11 @@ export const routes: Routes = [
     component: AdminDashboardComponent,
     canActivate: [AdminAuthGuard],
     children: [
+      {
+        path: '',
+        component: AnalyticsComponent,
+        canActivate: [AdminAuthGuard],
+      },
       {
         path: 'events',
         component: EventManagementComponent,

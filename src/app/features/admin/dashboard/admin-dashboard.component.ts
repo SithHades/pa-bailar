@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core'
 import { AuthService } from '../../../core/services/auth.service'
-import { Router } from '@angular/router'
+import { Router, RouterModule } from '@angular/router'
 import { RouterOutlet } from '@angular/router'
 import { CommonModule } from '@angular/common'
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser'
@@ -10,7 +10,7 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser'
   standalone: true,
   templateUrl: './admin-dashboard.component.html',
   styleUrls: ['./admin-dashboard.component.scss'],
-  imports: [CommonModule, RouterOutlet],
+  imports: [CommonModule, RouterOutlet, RouterModule],
 })
 export class AdminDashboardComponent implements OnInit {
   safeUrl: SafeResourceUrl | undefined
