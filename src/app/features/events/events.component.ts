@@ -19,6 +19,7 @@ export class EventsComponent implements OnInit {
   events: PabailarEvent[] = []
   expandedEventId: string | null = null
   fullscreenImage: string | null = null
+  showToast: boolean = false
 
   constructor(private eventService: EventService, private meta: Meta) {
     this.meta.addTag({
@@ -57,8 +58,16 @@ export class EventsComponent implements OnInit {
   onNewEventSubmit(eventData: PabailarEvent) {
     this.eventService.addEvent(eventData).subscribe(newEvent => {
       this.loadEvents()
+      this.showSuccessToast()
       // Optionally, add some user feedback here
     })
+  }
+
+  showSuccessToast() {
+    this.showToast = true
+    setTimeout(() => {
+      this.showToast = false
+    }, 5000) // Hide the toast after 3 seconds
   }
 
   toggleEventDetails(eventId: string) {
