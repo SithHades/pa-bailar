@@ -20,7 +20,14 @@ export class EventService {
         .listDocuments(this.databaseId, this.collectionId, [
           Query.equal('accepted', true),
         ])
-    ).pipe(map(response => response.documents as unknown as PabailarEvent[]))
+    )
+      .pipe(map(response => response.documents as unknown as PabailarEvent[]))
+      .pipe(
+        map(events => {
+          const now = new Date()
+          return events.filter(event => new Date(event.start) > now)
+        })
+      )
   }
 
   getEventProposals(): Observable<PabailarEvent[]> {
