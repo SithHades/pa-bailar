@@ -2,3 +2,8 @@
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
+
+.preserve-linebreaks {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}

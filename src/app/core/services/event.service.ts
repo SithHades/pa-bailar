@@ -13,7 +13,8 @@ export class EventService {
 
   constructor(private appwriteService: AppwriteService) {}
 
-  getEvents(): Observable<PabailarEvent[]> {
+  // If all is true, return all events, otherwise return only future events
+  getEvents(all: boolean = false): Observable<PabailarEvent[]> {
     return from(
       this.appwriteService
         .getDatabase()
@@ -24,6 +25,7 @@ export class EventService {
       .pipe(map(response => response.documents as unknown as PabailarEvent[]))
       .pipe(
         map(events => {
+          if (all) return events
           const now = new Date()
           return events.filter(event => new Date(event.start) > now)
         })

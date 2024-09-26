@@ -23,7 +23,9 @@ export class EventManagementComponent implements OnInit {
   }
 
   loadEvents() {
-    this.eventService.getEvents().subscribe(events => (this.events = events))
+    this.eventService
+      .getEvents(true)
+      .subscribe(events => (this.events = events))
   }
 
   createEvent() {
